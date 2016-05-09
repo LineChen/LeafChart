@@ -322,6 +322,14 @@ public class MyChartView extends View {
         this.isShadow = isShadow;
     }
 
+
+    public void setxAxles(int xAxles) {
+        this.xAxles = xAxles;
+    }
+
+    public void setyAxles(int yAxles) {
+        this.yAxles = yAxles;
+    }
 }
 
 
