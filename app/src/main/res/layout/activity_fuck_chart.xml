@@ -10,6 +10,6 @@
         android:id="@+id/fuck_chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#6600aaaa"/>
+        android:background="#66d7d9be"/>
 
 </LinearLayout>

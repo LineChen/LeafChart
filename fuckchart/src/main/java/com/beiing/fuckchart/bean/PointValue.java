@@ -1,5 +1,7 @@
 package com.beiing.fuckchart.bean;
 
+import android.graphics.RectF;
+
 /**
  * Created by chenliu on 2016/7/14.<br/>
  * 描述：点
@@ -15,6 +17,15 @@ public class PointValue {
     private float originY;
     private String label;
 
+    private RectF rectF; //label rectf
+
+    public RectF getRectF() {
+        return rectF;
+    }
+
+    public void setRectF(RectF rectF) {
+        this.rectF = rectF;
+    }
 
     public float getOriginX() {
         return originX;

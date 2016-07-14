@@ -71,6 +71,17 @@ public class Axis {
     private float stopY;
 
 
+    private boolean isShowText = true;//是否显示刻度
+
+    public boolean isShowText() {
+        return isShowText;
+    }
+
+    public Axis setShowText(boolean showText) {
+        isShowText = showText;
+        return this;
+    }
+
     public int getAxisLineColor() {
         return axisLineColor;
     }

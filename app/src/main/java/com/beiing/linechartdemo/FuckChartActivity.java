@@ -27,7 +27,7 @@ public class FuckChartActivity extends AppCompatActivity {
         Axis axisX = new Axis(getAxisValuesX());
         axisX.setAxisColor(Color.BLUE).setTextColor(Color.RED).setHasLines(true);
         Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.BLUE).setTextColor(Color.RED).setHasLines(true);
+        axisY.setAxisColor(Color.BLUE).setTextColor(Color.RED).setHasLines(true).setShowText(false);
         fuckLineChart.setAxisX(axisX);
         fuckLineChart.setAxisY(axisY);
         fuckLineChart.setLine(getLine());
@@ -59,15 +59,14 @@ public class FuckChartActivity extends AppCompatActivity {
         for (int i = 1; i < 7; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 5f);
-//            float var = (float) (Math.random() * 100);
-            float var = 20;
+            float var = (float) (Math.random() * 100);
             pointValue.setLabel(String.valueOf(var));
             pointValue.setY(var / 100);
             pointValues.add(pointValue);
         }
 
         Line line = new Line(pointValues);
-        line.setLineColor(Color.MAGENTA);
+        line.setLineColor(Color.GREEN).setPointColor(Color.RED).setPointRadius(3).setHasLabels(true);
         return line;
     }
 

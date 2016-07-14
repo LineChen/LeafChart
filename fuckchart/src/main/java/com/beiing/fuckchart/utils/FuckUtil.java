@@ -16,7 +16,7 @@ import android.view.WindowManager;
  * 描述：
  * </br>
  */
-public class ScreenUtil {
+public class FuckUtil {
 
     /**
      * 将sp值转换为px值，保证文字大小不变
@@ -56,7 +56,7 @@ public class ScreenUtil {
      * @param gText
      * @return
      */
-    public Bitmap getBitMapWithText(Context gContext, int gResId, String gText) {
+    public static Bitmap getBitMapWithText(Context gContext, int gResId, String gText) {
         Resources resources = gContext.getResources();
         float scale = resources.getDisplayMetrics().density;
         Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -76,7 +76,7 @@ public class ScreenUtil {
         // text color - #3D3D3D
         paint.setColor(Color.WHITE);
         // text size in pixels
-        paint.setTextSize((int) (15 * scale));
+        paint.setTextSize((int) (12 * scale));
         // text shadow
         // paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
         // draw text to the Canvas center
