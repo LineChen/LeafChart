@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.beiing.fuckchart.bean.Axis;
 import com.beiing.fuckchart.bean.AxisValue;
 import com.beiing.fuckchart.bean.Line;
+import com.beiing.fuckchart.bean.PointValue;
 import com.beiing.fuckchart.utils.ScreenUtil;
 
 import java.util.List;
@@ -31,7 +33,8 @@ public class FuckLineChart extends View {
     protected float leftPadding, topPadding, rightPadding, bottomPadding;//控件内部间隔
 
     private Context mContext;
-    Paint paint;
+    private Paint paint;
+    private Paint linePaint;
 
     public FuckLineChart(Context context) {
         this(context, null);
@@ -49,7 +52,7 @@ public class FuckLineChart extends View {
 
     private void initPaint() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
+        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     @Override
@@ -57,9 +60,10 @@ public class FuckLineChart extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         initViewSize();
 
-        resetSize();
-    }
+        resetAsixSize();
 
+        resetLineSize();
+    }
 
     private void initViewSize() {
         mWidth = getMeasuredWidth();
@@ -70,7 +74,7 @@ public class FuckLineChart extends View {
         bottomPadding = ScreenUtil.dp2px(getContext(), 20);
     }
 
-    private void resetSize() {
+    private void resetAsixSize() {
         if(axisX != null){
             List<AxisValue> values = axisX.getValues();
             int sizeX = values.size(); //几条y轴
@@ -88,7 +92,6 @@ public class FuckLineChart extends View {
 
             axisX.setStartX(0).setStartY(mHeight - bottomPadding)
                     .setStopX(mWidth).setStopY(mHeight - bottomPadding);
-
         }
 
         if(axisY != null){
@@ -100,34 +103,58 @@ public class FuckLineChart extends View {
                 AxisValue axisValue = values.get(i);
                 axisValue.setPointX(leftPadding);
                 if(i == 0){
-                    axisValue.setPointY(mHeight - bottomPadding);
+                    axisValue.setPointY(mHeight - bottomPadding );
                 } else {
                     axisValue.setPointY(mHeight - bottomPadding - yStep * i);
                 }
             }
-
             axisY.setStartX(leftPadding).setStartY(mHeight - bottomPadding)
                     .setStopX(leftPadding).setStopY(0);
-
         }
     }
 
+    private void resetLineSize() {
+        if(line != null && axisX != null && axisY != null){
+            List<PointValue> values = line.getValues();
+            int size = values.size();
+
+            List<AxisValue> axisValuesX = axisX.getValues();
+            List<AxisValue> axisValuesY = axisY .getValues();
+            float totalWidth = Math.abs(axisValuesX.get(0).getPointX() - axisValuesX.get(axisValuesX.size() - 1).getPointX());
+
+            float totalHeight = Math.abs(axisValuesY.get(0).getPointY() - axisValuesY.get(axisValuesY.size() - 1).getPointY());
+//            Log.e("=====", "totalWidth:" + totalWidth + ", totalHeight:" + totalHeight);
+            for (int i = 0; i < size; i++) {
+                PointValue pointValue = values.get(i);
+                float diffX = pointValue.getX() * totalWidth;
+                pointValue.setDiffX(diffX);
+
+                float diffY = pointValue.getY() * totalHeight;
+                pointValue.setDiffY(diffY);
+
+                Log.e("====", "x:" + pointValue.getX() + ", y:" + pointValue.getY());
+                Log.e("=======", "diffX:" + pointValue.getDiffX() + ", diffY:" + pointValue.getDiffY());
+            }
+        }
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         drawCoordinate(canvas);
-        
+
+        drawCoordinateLines(canvas);
+
         drawLines(canvas);
     }
+
 
     /**
      * 画坐标轴
      * @param canvas
      */
     private void drawCoordinate(Canvas canvas) {
-
         if(axisX != null && axisY != null){
             //////// X 轴
             // 1.刻度
@@ -140,11 +167,13 @@ public class FuckLineChart extends View {
             List<AxisValue> valuesX = axisX.getValues();
             for (AxisValue value : valuesX){
                 canvas.drawText(value.getLabel(), value.getPointX(),  value.getPointY() - textH / 2,paint);
+                float measureText = paint.measureText(value.getLabel());
+                value.setTextWidth(measureText);
             }
 
             // 2.坐标轴
             paint.setColor(axisX.getAxisColor());
-            paint.setStrokeWidth(axisX.getAxisWidth());
+            paint.setStrokeWidth(ScreenUtil.dp2px(mContext,axisX.getAxisWidth()));
             canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,31 +181,94 @@ public class FuckLineChart extends View {
             /////// Y 轴
             paint.setColor(axisY.getTextColor());
             paint.setTextSize(ScreenUtil.sp2px(mContext, axisY.getTextSize()));
+
+            Paint.FontMetrics fontMetri = paint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
+            float txtH = fontMetri.descent - fontMetrics.ascent;
+
             List<AxisValue> valuesY = axisY.getValues();
             for (AxisValue value : valuesY){
-                canvas.drawText(value.getLabel(), value.getPointX(),  value.getPointY(),paint);
+                float measureText = paint.measureText(value.getLabel());
+                float pointx = value.getPointX() - measureText /  2;
+                value.setPointX(pointx);
+                canvas.drawText(value.getLabel(), pointx , value.getPointY(),paint);
+                value.setTextHeight(txtH);
             }
 
             // 2.坐标轴
             paint.setColor(axisY.getAxisColor());
-            paint.setStrokeWidth(axisY.getAxisWidth());
-            canvas.drawLine(axisY.getStartX(), axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
+            paint.setStrokeWidth(ScreenUtil.dp2px(mContext, axisY.getAxisWidth()));
+            canvas.drawLine(axisY.getStartX() + axisX.getValues().get(0).getTextWidth() / 2,
+                    axisY.getStartY(), axisY.getStopX() + axisX.getValues().get(0).getTextWidth() / 2, axisY.getStopY(), paint);
         }
-
-
-
     }
 
     /**
+     * x 、y 轴
+     * @param canvas
+     */
+    private void drawCoordinateLines(Canvas canvas) {
+        if(axisX != null && axisY != null){
+            // 平行于y 轴的坐标轴
+            if(axisY.isHasLines()){
+                paint.setColor(axisY.getAxisLineColor());
+                paint.setStrokeWidth(ScreenUtil.dp2px(mContext, axisY.getAxisLineWidth()));
+                List<AxisValue> valuesX = axisX.getValues();
+                int sizeX = valuesX.size();
+                for (int i = 1; i < sizeX; i++) {
+                    AxisValue value = valuesX.get(i);
+                    canvas.drawLine(value.getPointX() + value.getTextWidth() / 2,
+                            axisY.getStartY() - ScreenUtil.dp2px(mContext, axisY.getAxisWidth()),
+                            value.getPointX() + value.getTextWidth() / 2, axisY.getStopY(), paint);
+                }
+            }
+
+            // 平行于x轴的坐标轴
+            if(axisX.isHasLines()){
+                paint.setColor(axisX.getAxisLineColor());
+                paint.setStrokeWidth(ScreenUtil.dp2px(mContext, axisX.getAxisLineWidth()));
+                List<AxisValue> valuesY = axisY.getValues();
+                int sizeY = valuesY.size();
+                for (int i = 1; i < sizeY; i++) {
+                    AxisValue value = valuesY.get(i);
+                    canvas.drawLine(axisY.getStartX() + axisX.getValues().get(0).getTextWidth() / 2 + ScreenUtil.dp2px(mContext, axisX.getAxisWidth()),
+                            value.getPointY(),
+                            axisX.getStopX(),
+                            value.getPointY() , paint);
+                }
+            }
+
+        }
+    }
+
+
+    /**
      * 画线条
+     *
      * @param canvas
      */
     private void drawLines(Canvas canvas) {
+        if(line != null){
+            linePaint.setColor(line.getLineColor());
+            linePaint.setStrokeWidth(ScreenUtil.dp2px(mContext, line.getLineWidth()));
+            List<PointValue> values = line.getValues();
+            int size = values.size();
 
+            List<AxisValue> axisValuesX = axisX.getValues();
+            for (int i = 1; i < size; i++) {
+                PointValue point1 = values.get(i - 1);
+                PointValue point2 = values.get(i);
+                float originX1 = point1.getDiffX() + axisValuesX.get(i).getTextWidth() / 2 + leftPadding;
+                float originX2 = point2.getDiffX() + axisValuesX.get(i - 1).getTextWidth() / 2 + leftPadding;
+                float originY1 = mHeight - topPadding - point1.getDiffY();
+                float originY2 = mHeight - topPadding - point2.getDiffY();;
+                canvas.drawLine(originX1, originY1,originX2,originY2, linePaint);
+            }
+        }
     }
 
     public void setLine(Line line) {
         this.line = line;
+        invalidate();
     }
 
     public void setAxisX(Axis axisX) {

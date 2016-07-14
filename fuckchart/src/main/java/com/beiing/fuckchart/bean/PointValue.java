@@ -7,11 +7,32 @@ package com.beiing.fuckchart.bean;
  */
 public class PointValue {
 
-    private float x;
+    private float x; //占x轴总长度的权重
     private float y;
     private float diffX;
     private float diffY;
+    private float originX; // 点坐标
+    private float originY;
     private String label;
+
+
+    public float getOriginX() {
+        return originX;
+    }
+
+    public PointValue setOriginX(float originX) {
+        this.originX = originX;
+        return this;
+    }
+
+    public float getOriginY() {
+        return originY;
+    }
+
+    public PointValue setOriginY(float originY) {
+        this.originY = originY;
+        return this;
+    }
 
     public float getX() {
         return x;

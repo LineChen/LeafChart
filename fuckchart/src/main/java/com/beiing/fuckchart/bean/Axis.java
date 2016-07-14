@@ -42,9 +42,16 @@ public class Axis {
     private int textSize = DEFAULT_TEXT_SIZE_SP;
 
     /**
-     * 坐标轴颜色
+     * 坐标轴颜色 - x y 轴
      */
     private int axisColor = Color.LTGRAY;
+
+    /**
+     * 平行于 x 或 y 轴 的坐标轴颜色
+     */
+    private int axisLineColor = Color.LTGRAY;
+
+    private float  axisLineWidth = DEFAULT_AXIS_WIDTH_SP;
 
     /**
      * 坐标轴宽度
@@ -62,6 +69,25 @@ public class Axis {
     private float startY;
     private float stopX;
     private float stopY;
+
+
+    public int getAxisLineColor() {
+        return axisLineColor;
+    }
+
+    public Axis setAxisLineColor(int axisLineColor) {
+        this.axisLineColor = axisLineColor;
+        return this;
+    }
+
+    public float getAxisLineWidth() {
+        return axisLineWidth;
+    }
+
+    public Axis setAxisLineWidth(float axisLineWidth) {
+        this.axisLineWidth = axisLineWidth;
+        return this;
+    }
 
     public float getStartX() {
         return startX;
@@ -123,8 +149,9 @@ public class Axis {
         return hasLines;
     }
 
-    public void setHasLines(boolean hasLines) {
+    public Axis setHasLines(boolean hasLines) {
         this.hasLines = hasLines;
+        return this;
     }
 
     public Typeface getTypeface() {

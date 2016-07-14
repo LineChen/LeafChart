@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Money> getData(){
         List<Money> data = new ArrayList<>();
         Money m;
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 12; i++) {
             m = new Money();
             m.setTitle((i + 1) + "月");
             m.setValue((float) (Math.random() * 1000));

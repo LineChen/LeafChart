@@ -20,10 +20,6 @@ public class Line {
     private boolean hasPoints = true;
     private boolean hasLines = true;
 
-    public Line(){
-
-    }
-
     public Line(List<PointValue> values) {
         this.values = values;
     }

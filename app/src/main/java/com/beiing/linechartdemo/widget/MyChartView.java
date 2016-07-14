@@ -183,7 +183,6 @@ public class MyChartView extends View {
             endX = (i)*yStep + leftPadding;
             startY = mHeight - bottomPadding - xStep - (mData.get(i - 1).getValue() - minValue ) * yHeight / delta;
             endY = mHeight - bottomPadding  - xStep- (mData.get(i).getValue() - minValue ) * yHeight / delta;
-//            Log.e(TAG, "startY:" + startY + ", endY:" + endY);
             canvas.drawLine(startX, startY, endX, endY, foldLinePaint);
         }
 
