@@ -274,7 +274,6 @@ public class MyChartView extends View {
         return maxValue;
     }
 
-
     /**
      * 给定背景图，得到一个带有文字的Bitmap
      * @param gContext

@@ -1,7 +1,9 @@
 package com.beiing.linechartdemo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.beiing.linechartdemo.widget.MyChartView;
 
@@ -37,4 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void gotoFuckChart(View view) {
+        startActivity( new Intent(this, FuckChartActivity.class));
+    }
 }
