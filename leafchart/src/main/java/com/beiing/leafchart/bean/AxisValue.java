@@ -15,24 +15,12 @@ public class AxisValue {
     /**y坐标**/
     private float pointY;
 
-    private float textWidth;
+    public AxisValue(){
 
-    private float textHeight;
-
-    public float getTextHeight() {
-        return textHeight;
     }
 
-    public void setTextHeight(float textHeight) {
-        this.textHeight = textHeight;
-    }
-
-    public float getTextWidth() {
-        return textWidth;
-    }
-
-    public void setTextWidth(float textWidth) {
-        this.textWidth = textWidth;
+    public AxisValue(String label){
+        this.label = label;
     }
 
     public String getLabel() {

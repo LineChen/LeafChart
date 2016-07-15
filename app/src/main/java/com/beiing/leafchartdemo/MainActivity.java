@@ -40,6 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void gotoFuckChart(View view) {
-        startActivity( new Intent(this, FuckChartActivity.class));
+        startActivity( new Intent(this, LeafChartActivity.class));
     }
 }

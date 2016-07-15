@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.beiing.leafchartdemo.FuckChartActivity">
+    android:background="#f2f2f2"
+    tools:context=".LeafChartActivity">
 
 
     <TextView
@@ -13,9 +14,9 @@
         android:text="LeafLineChart"/>
 
     <com.beiing.leafchart.LeafLineChart
-        android:id="@+id/fuck_chart"
+        android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#66d7d9be"/>
+        android:background="#ffffff"/>
 
 </LinearLayout>

@@ -74,10 +74,10 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected void initViewSize() {
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
-        leftPadding = LeafUtil.dp2px(getContext(), 15);
-        topPadding = leftPadding;
-        rightPadding = leftPadding;
-        bottomPadding = LeafUtil.dp2px(getContext(), 20);
+        leftPadding = LeafUtil.dp2px(mContext, 20);
+        rightPadding = LeafUtil.dp2px(mContext, 10);
+        topPadding = LeafUtil.dp2px(mContext, 15);
+        bottomPadding = LeafUtil.dp2px(mContext, 20);
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class AbsLeafChart extends View implements Chart{
         if(axisX != null){
             List<AxisValue> values = axisX.getValues();
             int sizeX = values.size(); //几条y轴
-            float xStep = (mWidth - leftPadding - rightPadding) / sizeX;
+            float xStep = (mWidth - leftPadding) / sizeX;
             axisX.setStepSize(xStep);
             for (int i = 0; i < sizeX; i++) {
                 AxisValue axisValue = values.get(i);
@@ -154,99 +154,28 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        drawCoordinate(canvas);
-
         drawCoordinateLines(canvas);
+
+        drawCoordinateText(canvas);
 
         setPointsLoc();
     }
-
     /**
-     * 确定每个点所在位置
-     */
-    protected void setPointsLoc(){
-        if(line != null){
-            linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
-            List<PointValue> values = line.getValues();
-            int size = values.size();
-            List<AxisValue> axisValuesX = axisX.getValues();
-            for (int i = 0; i < size; i++) {
-                PointValue point1 = values.get(i);
-                float originX1 = point1.getDiffX() + axisValuesX.get(i).getTextWidth() / 2 + leftPadding;
-                float originY1 = mHeight - bottomPadding - point1.getDiffY();
-                point1.setOriginX(originX1).setOriginY(originY1);
-            }
-        }
-    }
-
-    /**
-     * 画坐标轴
-     * @param canvas
-     */
-    protected void drawCoordinate(Canvas canvas) {
-        if(axisX != null && axisY != null){
-            //////// X 轴
-            // 1.刻度
-            paint.setColor(axisX.getTextColor());
-            paint.setTextSize(LeafUtil.sp2px(mContext, axisX.getTextSize()));
-
-            Paint.FontMetrics fontMetrics = paint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
-            float textH = fontMetrics.descent - fontMetrics.ascent;
-
-            List<AxisValue> valuesX = axisX.getValues();
-            float firstTxtW = 0;
-            for (int i = 0; i < valuesX.size(); i++) {
-                AxisValue value = valuesX.get(i);
-                if(axisX.isShowText()){
-                    canvas.drawText(value.getLabel(), value.getPointX(),  value.getPointY() - textH / 2,paint);
-                }
-                float measureText = paint.measureText(value.getLabel());
-                if(i == 0)
-                    firstTxtW = measureText;
-
-                if(measureText == 0f)
-                    measureText = firstTxtW;
-                value.setTextWidth(measureText);
-            }
-
-            // 2.坐标轴
-            paint.setColor(axisX.getAxisColor());
-            paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
-            canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            /////// Y 轴
-            paint.setColor(axisY.getTextColor());
-            paint.setTextSize(LeafUtil.sp2px(mContext, axisY.getTextSize()));
-
-            Paint.FontMetrics fontMetri = paint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
-            float txtH = fontMetri.descent - fontMetrics.ascent;
-
-            List<AxisValue> valuesY = axisY.getValues();
-            for (AxisValue value : valuesY){
-                float measureText = paint.measureText(value.getLabel());
-                float pointx = value.getPointX() - measureText /  2;
-                value.setPointX(pointx);
-                if(axisY.isShowText()){
-                    canvas.drawText(value.getLabel(), pointx , value.getPointY(),paint);
-                }
-                value.setTextHeight(txtH);
-            }
-
-            // 2.坐标轴
-            paint.setColor(axisY.getAxisColor());
-            paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
-            canvas.drawLine(axisY.getStartX() + axisX.getValues().get(0).getTextWidth() / 2,
-                    axisY.getStartY(), axisY.getStopX() + axisX.getValues().get(0).getTextWidth() / 2, axisY.getStopY(), paint);
-        }
-    }
-
-    /**
-     * x 、y 轴
+     * 坐标轴
      * @param canvas
      */
     protected void drawCoordinateLines(Canvas canvas) {
+        //X坐标轴
+        paint.setColor(axisX.getAxisColor());
+        paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
+        canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
+
+        //Y坐标轴
+        paint.setColor(axisY.getAxisColor());
+        paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
+        canvas.drawLine(axisY.getStartX(),
+                axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
+
         if(axisX != null && axisY != null){
             // 平行于y 轴的坐标轴
             if(axisY.isHasLines()){
@@ -256,9 +185,9 @@ public abstract class AbsLeafChart extends View implements Chart{
                 int sizeX = valuesX.size();
                 for (int i = 1; i < sizeX; i++) {
                     AxisValue value = valuesX.get(i);
-                    canvas.drawLine(value.getPointX() + value.getTextWidth() / 2,
+                    canvas.drawLine(value.getPointX(),
                             axisY.getStartY() - LeafUtil.dp2px(mContext, axisY.getAxisWidth()),
-                            value.getPointX() + value.getTextWidth() / 2, axisY.getStopY(), paint);
+                            value.getPointX(), axisY.getStopY(), paint);
                 }
             }
 
@@ -270,7 +199,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                 int sizeY = valuesY.size();
                 for (int i = 1; i < sizeY; i++) {
                     AxisValue value = valuesY.get(i);
-                    canvas.drawLine(axisY.getStartX() + axisX.getValues().get(0).getTextWidth() / 2 + LeafUtil.dp2px(mContext, axisX.getAxisWidth()),
+                    canvas.drawLine(axisY.getStartX() + LeafUtil.dp2px(mContext, axisX.getAxisWidth()),
                             value.getPointY(),
                             axisX.getStopX(),
                             value.getPointY() , paint);
@@ -280,6 +209,61 @@ public abstract class AbsLeafChart extends View implements Chart{
         }
     }
 
+    /**
+     * 画坐标轴 刻度值
+     * @param canvas
+     */
+    protected void drawCoordinateText(Canvas canvas) {
+        if(axisX != null && axisY != null){
+            //////// X 轴
+            // 1.刻度
+            paint.setColor(axisX.getTextColor());
+            paint.setTextSize(LeafUtil.sp2px(mContext, axisX.getTextSize()));
+
+            Paint.FontMetrics fontMetrics = paint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
+            float textH = fontMetrics.descent - fontMetrics.ascent;
+
+            List<AxisValue> valuesX = axisX.getValues();
+            if(axisX.isShowText()){
+                for (int i = 0; i < valuesX.size(); i++) {
+                    AxisValue value = valuesX.get(i);
+                    float textW = paint.measureText(value.getLabel());
+                    canvas.drawText(value.getLabel(), value.getPointX() - textW / 2,  value.getPointY() - textH / 2,paint);
+                }
+            }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////// Y 轴
+            paint.setColor(axisY.getTextColor());
+            paint.setTextSize(LeafUtil.sp2px(mContext, axisY.getTextSize()));
+
+            List<AxisValue> valuesY = axisY.getValues();
+            if(axisY.isShowText()){
+                for (AxisValue value : valuesY){
+                    float textW = paint.measureText(value.getLabel());
+                    float pointx = value.getPointX() - 1.1f * textW;
+                    canvas.drawText(value.getLabel(), pointx , value.getPointY(),paint);
+                }
+            }
+        }
+    }
+
+    /**
+     * 确定每个点所在位置
+     */
+    protected void setPointsLoc(){
+        if(line != null){
+            linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
+            List<PointValue> values = line.getValues();
+            int size = values.size();
+            for (int i = 0; i < size; i++) {
+                PointValue point1 = values.get(i);
+                float originX1 = point1.getDiffX() + leftPadding;
+                float originY1 = mHeight - bottomPadding - point1.getDiffY();
+                point1.setOriginX(originX1).setOriginY(originY1);
+            }
+        }
+    }
 
     /**
      * 画圆点
@@ -365,7 +349,7 @@ public abstract class AbsLeafChart extends View implements Chart{
 
                     //写文字
                     labelPaint.setColor(Color.WHITE);
-                    float xCoordinate = point.getOriginX() - textW / 2;
+                    float xCoordinate = left + (right - left - textW) / 2;
                     float yCoordinate = bottom - (bottom - top - textH) / 2 ;
                     canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
                 }

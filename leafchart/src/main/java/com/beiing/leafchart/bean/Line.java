@@ -11,12 +11,12 @@ import java.util.List;
  * </br>
  */
 public class Line {
-    public static final float DEFAULT_AXIS_WIDTH_SP = 1;
+    public static final float DEFAULT_AXIS_WIDTH_DP = 1;
     public static final int DEFAULT_LABEL_COLOR = Color.DKGRAY;
-    public static final float DEFAULT_LABEL_RADIUS_SP = 4;
+    public static final float DEFAULT_LABEL_RADIUS_SP = 3;
 
-    private int lineColor = Color.GRAY;
-    private float lineWidth = DEFAULT_AXIS_WIDTH_SP;
+    private int lineColor = Color.GRAY; //折线颜色
+    private float lineWidth = DEFAULT_AXIS_WIDTH_DP; // 折线的宽度
 
     private List<PointValue> values = new ArrayList<PointValue>();
 
@@ -26,7 +26,7 @@ public class Line {
 
     private int pointColor = Color.GRAY;//圆点颜色
 
-    private float pointRadius = DEFAULT_AXIS_WIDTH_SP;//圆点半径
+    private float pointRadius = DEFAULT_AXIS_WIDTH_DP;//圆点半径
 
     private boolean hasLabels = false;// 是否画标签
 
