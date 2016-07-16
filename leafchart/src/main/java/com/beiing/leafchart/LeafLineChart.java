@@ -7,6 +7,7 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 
 import com.beiing.leafchart.bean.PointValue;
+import com.beiing.leafchart.support.LeafUtil;
 
 import java.util.List;
 
@@ -16,6 +17,11 @@ import java.util.List;
  * </br>
  */
 public class LeafLineChart extends AbsLeafChart {
+
+    private static final float LINE_SMOOTHNESS = 0.16f;
+
+    private Path path = new Path();
+
 
     public LeafLineChart(Context context) {
         this(context, null, 0);
@@ -38,10 +44,21 @@ public class LeafLineChart extends AbsLeafChart {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        drawSmoothPath(canvas);
+        if(line != null){
+            if(line.isCubic()) {
+                drawCubicPath(canvas);
+            } else {
+                drawLines(canvas);
+            }
+            if(line.isFill()){
+                //填充
+                drawFillArea(canvas);
+            }
+        }
         drawPoints(canvas);
         drawLabels(canvas);
     }
+
 
     /**
      * 画折线
@@ -51,30 +68,30 @@ public class LeafLineChart extends AbsLeafChart {
     protected void drawLines(Canvas canvas) {
         if(line != null){
             linePaint.setColor(line.getLineColor());
-            linePaint.setStrokeWidth(line.getLineWidth());
+            linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
+            linePaint.setStyle(Paint.Style.STROKE);
             List<PointValue> values = line.getValues();
             int size = values.size();
-            for (int i = 1; i < size; i++) {
-                PointValue point1 = values.get(i - 1);
-                PointValue point2 = values.get(i);
-                canvas.drawLine(point1.getOriginX(), point1.getOriginY(),point2.getOriginX(),point2.getOriginY(), linePaint);
+            for (int i = 0; i < size; i++) {
+                PointValue point = values.get(i);
+                if(i == 0)  path.moveTo(point.getOriginX(), point.getOriginY());
+                else  path.lineTo(point.getOriginX(), point.getOriginY());
             }
+
+            canvas.drawPath(path, linePaint);
         }
     }
-
-    private static final float LINE_SMOOTHNESS = 0.16f;
 
     /**
      * 画曲线
      * @param canvas
      */
-    private void drawSmoothPath(Canvas canvas) {
+    private void drawCubicPath(Canvas canvas) {
         if(line != null){
             linePaint.setColor(line.getLineColor());
-            linePaint.setStrokeWidth(line.getLineWidth());
+            linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
             linePaint.setStyle(Paint.Style.STROKE);
 
-            Path path = new Path();
             float prePreviousPointX = Float.NaN;
             float prePreviousPointY = Float.NaN;
             float previousPointX = Float.NaN;
@@ -151,8 +168,39 @@ public class LeafLineChart extends AbsLeafChart {
                 currentPointY = nextPointY;
             }
             canvas.drawPath(path, linePaint);
+        }
+    }
+
+
+    /**
+     * 填充 : 折线可以，曲线填充错误(?)
+     * @param canvas
+     */
+    private void drawFillArea(Canvas canvas) {
+        //继续使用前面的 path
+        if(line != null && line.getValues().size() > 1){
+            List<PointValue> values = line.getValues();
+            PointValue firstPoint = values.get(0);
+            float firstX = firstPoint.getOriginX();
+
+            PointValue lastPoint = values.get(values.size() - 1);
+            float lastX = lastPoint.getOriginX();
+            path.lineTo(lastX, axisX.getStartY());
+            path.lineTo(firstX, axisX.getStartY());
+            path.close();
+
+            linePaint.setStyle(Paint.Style.FILL);
+            if(line.getFillColr() == 0)
+                linePaint.setAlpha(100);
+            else
+                linePaint.setColor(line.getFillColr());
+
+            canvas.drawPath(path, linePaint);
+
             path.reset();
         }
     }
+
+
 
 }

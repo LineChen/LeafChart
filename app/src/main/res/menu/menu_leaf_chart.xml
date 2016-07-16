@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_more"
+        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:title="more"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/fold_line"
+                android:title="折线图" />
+            <item
+                android:id="@+id/cubic_line"
+                android:title="曲线图" />
+        </menu>
+    </item>
+
+</menu>

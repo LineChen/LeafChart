@@ -13,7 +13,7 @@ import java.util.List;
 public class Line {
     public static final float DEFAULT_AXIS_WIDTH_DP = 1;
     public static final int DEFAULT_LABEL_COLOR = Color.DKGRAY;
-    public static final float DEFAULT_LABEL_RADIUS_SP = 3;
+    public static final float DEFAULT_LABEL_RADIUS_DP = 3;
 
     private int lineColor = Color.GRAY; //折线颜色
     private float lineWidth = DEFAULT_AXIS_WIDTH_DP; // 折线的宽度
@@ -32,7 +32,40 @@ public class Line {
 
     private int labelColor = DEFAULT_LABEL_COLOR;//标签背景色
 
-    private float labelRadius = DEFAULT_LABEL_RADIUS_SP;
+    private float labelRadius = DEFAULT_LABEL_RADIUS_DP;
+
+    private boolean isCubic; //是否是曲线
+
+    private boolean isFill; // 是否填充
+
+    private int fillColr = 0; // 填充色
+
+    public boolean isCubic() {
+        return isCubic;
+    }
+
+    public Line setCubic(boolean cubic) {
+        isCubic = cubic;
+        return this;
+    }
+
+    public boolean isFill() {
+        return isFill;
+    }
+
+    public Line setFill(boolean fill) {
+        isFill = fill;
+        return this;
+    }
+
+    public int getFillColr() {
+        return fillColr;
+    }
+
+    public Line setFillColr(int fillColr) {
+        this.fillColr = fillColr;
+        return this;
+    }
 
     public float getLabelRadius() {
         return labelRadius;

@@ -58,6 +58,7 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected void initPaint() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        linePaint.setStrokeCap(Paint.Cap.ROUND);
         labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
@@ -205,7 +206,6 @@ public abstract class AbsLeafChart extends View implements Chart{
                             value.getPointY() , paint);
                 }
             }
-
         }
     }
 
@@ -347,7 +347,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                     labelPaint.setColor(line.getLabelColor());
                     canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
 
-                    //写文字
+                    //drawText
                     labelPaint.setColor(Color.WHITE);
                     float xCoordinate = left + (right - left - textW) / 2;
                     float yCoordinate = bottom - (bottom - top - textH) / 2 ;
