@@ -10,35 +10,27 @@ import java.util.List;
  * 描述：线
  * </br>
  */
-public class Line {
-    public static final float DEFAULT_AXIS_WIDTH_DP = 1;
-    public static final int DEFAULT_LABEL_COLOR = Color.DKGRAY;
-    public static final float DEFAULT_LABEL_RADIUS_DP = 3;
-
+public class Line extends ChartData{
     private int lineColor = Color.GRAY; //折线颜色
-    private float lineWidth = DEFAULT_AXIS_WIDTH_DP; // 折线的宽度
-
-    private List<PointValue> values = new ArrayList<PointValue>();
-
+    private float lineWidth = 1; // 折线的宽度dp
     private boolean hasPoints = true; //是否画圆点
 
     private boolean hasLines = true; // 是否画线条
 
     private int pointColor = Color.GRAY;//圆点颜色
 
-    private float pointRadius = DEFAULT_AXIS_WIDTH_DP;//圆点半径
-
-    private boolean hasLabels = false;// 是否画标签
-
-    private int labelColor = DEFAULT_LABEL_COLOR;//标签背景色
-
-    private float labelRadius = DEFAULT_LABEL_RADIUS_DP;
+    private float pointRadius = 1;//圆点半径dp
 
     private boolean isCubic; //是否是曲线
 
     private boolean isFill; // 是否填充
 
     private int fillColr = 0; // 填充色
+
+
+    public Line(List<PointValue> values) {
+        this.values = values;
+    }
 
     public boolean isCubic() {
         return isCubic;
@@ -94,9 +86,6 @@ public class Line {
         return this;
     }
 
-    public Line(List<PointValue> values) {
-        this.values = values;
-    }
 
     public int getPointColor() {
         return pointColor;
