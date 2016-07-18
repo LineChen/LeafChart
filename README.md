@@ -1,5 +1,4 @@
 # LeafChart
-# LeafChart
 
 
 ## 设置
