@@ -13,6 +13,6 @@
 
 
 ## 屏幕截图
-![截图1](//F:\AS-2.0\LeafChart\screenshot\cubic_filled.png)
+![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/cubic_filled.png)
 
-![截图2](//F:\AS-2.0\LeafChart\screenshot\fold_not_filled.png)
+![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/fold_not_filled.png)
