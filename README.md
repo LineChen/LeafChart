@@ -13,4 +13,10 @@
 
 
 ## 屏幕截图
+<<<<<<< HEAD
 ![](http://F:\AS-2.0\LeafChart\screenshot\cubic_filled)
+=======
+![截图1](//F:\AS-2.0\LeafChart\screenshot\cubic_filled.png)
+
+![截图2](//F:\AS-2.0\LeafChart\screenshot\fold_not_filled.png)
+>>>>>>> 85008e62182665c18332c5d192cb218f9d5539a3
