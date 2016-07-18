@@ -17,23 +17,12 @@ public class PointValue {
     private float originY;
     private String label;
 
-    private RectF rectF; //label rectf
-
     public PointValue(){
 
     }
 
     public PointValue(String label){
         this.label = label;
-    }
-
-
-    public RectF getRectF() {
-        return rectF;
-    }
-
-    public void setRectF(RectF rectF) {
-        this.rectF = rectF;
     }
 
     public float getOriginX() {

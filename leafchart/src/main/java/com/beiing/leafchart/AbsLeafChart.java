@@ -275,8 +275,9 @@ public abstract class AbsLeafChart extends View implements Chart{
                 labelPaint.setColor(line.getPointColor());
                 List<PointValue> values = line.getValues();
                 for (PointValue point: values) {
+                    float radius = LeafUtil.dp2px(mContext, line.getPointRadius());
                     canvas.drawCircle(point.getOriginX(), point.getOriginY(),
-                            LeafUtil.dp2px(mContext, line.getPointRadius()), labelPaint);
+                            radius , labelPaint);
                 }
             }
         }
@@ -342,7 +343,6 @@ public abstract class AbsLeafChart extends View implements Chart{
                     }
 
                     RectF rectF = new RectF(left, top, right, bottom);
-                    point.setRectF(rectF);
                     float labelRadius = LeafUtil.dp2px(mContext,line.getLabelRadius());
                     labelPaint.setColor(line.getLabelColor());
                     canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);

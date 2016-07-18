@@ -90,7 +90,7 @@ public class LeafChartActivity extends AppCompatActivity {
 
         Line line = new Line(pointValues);
         line.setLineColor(Color.parseColor("#33B5E5")).setPointColor(Color.YELLOW).
-                setCubic(true).setPointRadius(3).setHasLabels(true)
+                setCubic(true).setPointRadius(5).setHasLabels(true)
                 .setFill(true);
         return line;
     }

@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.LeafUtil;
@@ -173,7 +175,7 @@ public class LeafLineChart extends AbsLeafChart {
 
 
     /**
-     * 填充 : 折线可以，曲线填充错误(?)
+     * 填充
      * @param canvas
      */
     private void drawFillArea(Canvas canvas) {
@@ -199,6 +201,43 @@ public class LeafLineChart extends AbsLeafChart {
 
             path.reset();
         }
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(line != null && line.isHasPoints()){
+            List<PointValue> values = line.getValues();
+            int size = values.size();
+            int touchindex = 0;
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    for (int i = 0; i < size; i++) {
+                        PointValue point = values.get(i);
+                        if(isInArea(point.getOriginX(), point.getOriginY(), event.getX(), event.getY(), LeafUtil.dp2px(mContext, line.getPointRadius()))){
+                            touchindex = i;
+                            break;
+                        }
+                    }
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                        if(touchindex != 0){
+                            PointValue point = values.get(touchindex);
+                            touchindex = 0;
+                        }
+                    break;
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+
+
+    private boolean isInArea(float x, float y, float touchX, float touchY, float radius) {
+        float diffX = touchX - x;
+        float diffY = touchY - y;
+        return Math.pow(diffX, 2) + Math.pow(diffY, 2) <= 2 * Math.pow(radius, 2);
     }
 
 }

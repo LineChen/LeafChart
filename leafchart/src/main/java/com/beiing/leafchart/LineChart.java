@@ -345,7 +345,6 @@ public class LineChart extends View {
                     }
 
                     RectF rectF = new RectF(left, top, right, bottom);
-                    point.setRectF(rectF);
                     float labelRadius = LeafUtil.dp2px(mContext,line.getLabelRadius());
                     labelPaint.setColor(line.getLabelColor());
                     canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
