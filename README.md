@@ -13,3 +13,6 @@
 
 
 ## 屏幕截图
+![截图1](http://F:\AS-2.0\LeafChart\screenshot\cubic_filled.png)
+
+![截图2](http://F:\AS-2.0\LeafChart\screenshot\fold_not_filled.png)
