@@ -16,3 +16,6 @@
 ![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/cubic_filled.png)
 
 ![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/fold_not_filled.png)
+
+## 使用
+
