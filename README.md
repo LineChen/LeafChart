@@ -24,7 +24,7 @@
 
 
 
-``` python
+``` javascript
     <com.beiing.leafchart.LeafLineChart
         android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
