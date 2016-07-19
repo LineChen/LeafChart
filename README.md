@@ -22,14 +22,20 @@
 1. 导入library到项目中
 2. 代码中使用
 
-```
+
+
+``` python
     <com.beiing.leafchart.LeafLineChart
         android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="#ffffff"/>
 
+```
 
+
+初始化X轴数据：
+``` python
     private List<AxisValue> getAxisValuesX(){
         List<AxisValue> axisValues = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
@@ -39,6 +45,52 @@
         }
         return axisValues;
     }
+```
+
+
+初始化Y轴数据：
+```python
+private List<AxisValue> getAxisValuesY(){
+        List<AxisValue> axisValues = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            AxisValue value = new AxisValue();
+            value.setLabel(String.valueOf(i * 10));
+            axisValues.add(value);
+        }
+        return axisValues;
+    }
+```
+
+初始化点数据和相关设置：
+```python
+    private Line getFoldLine(){
+        List<PointValue> pointValues = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            PointValue pointValue = new PointValue();
+            pointValue.setX( (i - 1) / 11f);
+            float var = (float) (Math.random() * 100);
+            pointValue.setLabel(String.valueOf(var));
+            pointValue.setY(var / 100);
+            pointValues.add(pointValue);
+        }
+
+        Line line = new Line(pointValues);
+        line.setLineColor(Color.parseColor("#33B5E5")).setPointColor(Color.YELLOW).
+                setCubic(false).setPointRadius(3).setHasLabels(true)
+                .setFill(false);
+        return line;
+    }
+```
+
+```python
+
+Axis axisX = new Axis(getAxisValuesX());
+axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
+Axis axisY = new Axis(getAxisValuesY());
+axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
+fuckLineChart.setAxisX(axisX);
+fuckLineChart.setAxisY(axisY);
+fuckLineChart.setLine(getFoldLine());
 
 
 ```
