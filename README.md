@@ -82,7 +82,7 @@ private List<AxisValue> getAxisValuesY(){
     }
 ```
 
-```python
+```javascript
 
 Axis axisX = new Axis(getAxisValuesX());
 axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
@@ -91,7 +91,6 @@ axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHa
 fuckLineChart.setAxisX(axisX);
 fuckLineChart.setAxisY(axisY);
 fuckLineChart.setLine(getFoldLine());
-
 
 ```
 
