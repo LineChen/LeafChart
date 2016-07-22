@@ -24,7 +24,7 @@
 
 
 
-``` python
+``` java
     <com.beiing.leafchart.LeafLineChart
         android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
 
 
 初始化X轴数据：
-``` python
+``` java
     private List<AxisValue> getAxisValuesX(){
         List<AxisValue> axisValues = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
@@ -49,7 +49,7 @@
 
 
 初始化Y轴数据：
-```python
+```java
 private List<AxisValue> getAxisValuesY(){
         List<AxisValue> axisValues = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
@@ -62,7 +62,7 @@ private List<AxisValue> getAxisValuesY(){
 ```
 
 初始化点数据和相关设置：
-```python
+```java
     private Line getFoldLine(){
         List<PointValue> pointValues = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
@@ -82,7 +82,11 @@ private List<AxisValue> getAxisValuesY(){
     }
 ```
 
+<<<<<<< HEAD
 ```javascript
+=======
+```java
+>>>>>>> 4fb7a1e93258d9a5d10a87b995a6f7e3c7db4cd7
 
 Axis axisX = new Axis(getAxisValuesX());
 axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
