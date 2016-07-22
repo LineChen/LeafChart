@@ -89,7 +89,6 @@ public abstract class AbsLeafChart extends View implements Chart{
             List<AxisValue> values = axisX.getValues();
             int sizeX = values.size(); //几条y轴
             float xStep = (mWidth - leftPadding) / sizeX;
-            axisX.setStepSize(xStep);
             for (int i = 0; i < sizeX; i++) {
                 AxisValue axisValue = values.get(i);
                 axisValue.setPointY(mHeight);
@@ -108,7 +107,6 @@ public abstract class AbsLeafChart extends View implements Chart{
             List<AxisValue> values = axisY.getValues();
             int sizeY = values.size(); //几条x轴
             float yStep = (mHeight - topPadding - bottomPadding) / sizeY;
-            axisY.setStepSize(yStep);
             for (int i = 0; i < sizeY; i++) {
                 AxisValue axisValue = values.get(i);
                 axisValue.setPointX(leftPadding);

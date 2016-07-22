@@ -47,21 +47,17 @@ public class Axis {
     private int axisColor = Color.LTGRAY;
 
     /**
+     * 坐标轴宽度
+     */
+    private float axisWidth = DEFAULT_AXIS_WIDTH_DP;
+
+
+    /**
      * 平行于 x 或 y 轴 的坐标轴颜色
      */
     private int axisLineColor = Color.LTGRAY;
 
     private float  axisLineWidth = DEFAULT_AXIS_WIDTH_DP;
-
-    /**
-     * 坐标轴宽度
-     */
-    private float axisWidth = DEFAULT_AXIS_WIDTH_DP;
-
-    /**
-     * 刻度值间隔宽度
-     */
-    private float stepSize;
 
 
     // 坐标轴起点终点位置
@@ -70,8 +66,10 @@ public class Axis {
     private float stopX;
     private float stopY;
 
-
-    private boolean isShowText = true;//是否显示刻度
+    /**
+     * 是否显示刻度
+     */
+    private boolean isShowText = true;
 
     public boolean isShowText() {
         return isShowText;
@@ -134,14 +132,6 @@ public class Axis {
     public Axis setStopY(float stopY) {
         this.stopY = stopY;
         return this;
-    }
-
-    public float getStepSize() {
-        return stepSize;
-    }
-
-    public void setStepSize(float stepSize) {
-        this.stepSize = stepSize;
     }
 
     public Axis(List<AxisValue> values) {
