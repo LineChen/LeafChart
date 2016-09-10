@@ -2,6 +2,8 @@ package com.beiing.leafchart.bean;
 
 import android.graphics.Color;
 
+import java.util.List;
+
 /**
  * Created by chenliu on 2016/9/10.<br/>
  * 描述：直方图
@@ -11,7 +13,7 @@ public class Square extends ChartData {
     /**
      * 直方图宽度
      */
-    private int width = 2;
+    private int width = 10;
 
     /**
      * 边框宽度
@@ -24,9 +26,14 @@ public class Square extends ChartData {
     private int borderColor = Color.GRAY;
 
     /**
-     * 填充颜色
+     * 是否填充
      */
-    private int fillColor = Color.GRAY;
+    private boolean isFill = false;
+
+
+    public Square(List<PointValue> values){
+        this.values = values;
+    }
 
 
     public int getWidth() {
@@ -56,14 +63,15 @@ public class Square extends ChartData {
         return this;
     }
 
-    public int getFillColor() {
-        return fillColor;
+    public boolean isFill() {
+        return isFill;
     }
 
-    public Square setFillColor(int fillColor) {
-        this.fillColor = fillColor;
+    public Square setFill(boolean fill) {
+        isFill = fill;
         return this;
     }
+
 }
 
 

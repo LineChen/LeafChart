@@ -10,6 +10,7 @@ import com.beiing.leafchart.bean.Axis;
 import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
+import com.beiing.leafchart.bean.Square;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,13 @@ public class LeafChartActivity extends AppCompatActivity {
 
     private void initSquareChart() {
         Axis axisX = new Axis(getAxisValuesX());
-        axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
+        axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(false);
         Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
+        axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
 
         leafSquareChart.setAxisX(axisX);
         leafSquareChart.setAxisY(axisY);
-
+        leafSquareChart.setChartData(getSquares());
     }
 
     private void initLineChart() {
@@ -115,6 +116,20 @@ public class LeafChartActivity extends AppCompatActivity {
         return line;
     }
 
+    private Square getSquares(){
+        List<PointValue> pointValues = new ArrayList<>();
+        for (int i = 3; i <= 12; i++) {
+            PointValue pointValue = new PointValue();
+            pointValue.setX( (i - 1) / 11f);
+            float var = (float) (Math.random() * 100);
+            pointValue.setLabel(String.valueOf(var));
+            pointValue.setY(var / 100);
+            pointValues.add(pointValue);
+        }
 
+        Square square = new Square(pointValues);
+        square.setBorderColor(Color.parseColor("#FF4081")).setWidth(20).setFill(true);
+        return square;
+    }
 
 }

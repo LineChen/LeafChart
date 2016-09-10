@@ -1,7 +1,10 @@
 # LeafChart
 
 
-## 设置
+##一、折线图
+
+
+### 1.1 设置
 -  坐标轴颜色、宽度
 -  坐标轴刻度字体大小、颜色
 -  折线或曲线宽度、颜色
@@ -12,17 +15,12 @@
 
 
 
-## 屏幕截图
+### 1.2 效果图
 ![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/cubic_filled.png)
 
 ![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/fold_not_filled.png)
 
-## 使用
-
-1. 导入library到项目中
-2. 代码中使用
-
-
+### 1.3 使用
 
 ``` java
     <com.beiing.leafchart.LeafLineChart
@@ -92,14 +90,16 @@ fuckLineChart.setAxisX(axisX);
 fuckLineChart.setAxisY(axisY);
 fuckLineChart.setLine(getFoldLine());
 
-
 ```
 
 
+## 二、直方图
 
+使用类似折线图
 
+###2.1 效果图
 
-
+![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square.jpg)
 
 
 

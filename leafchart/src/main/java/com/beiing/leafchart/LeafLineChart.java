@@ -373,8 +373,6 @@ public class LeafLineChart extends AbsLeafChart {
         return super.onTouchEvent(event);
     }
 
-
-
     private boolean isInArea(float x, float y, float touchX, float touchY, float radius) {
         float diffX = touchX - x;
         float diffY = touchY - y;
