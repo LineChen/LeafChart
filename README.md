@@ -99,7 +99,7 @@ fuckLineChart.setLine(getFoldLine());
 
 ###2.1 效果图
 
-![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square.jpg)
+![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square.png)
 
 
 
