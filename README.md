@@ -80,11 +80,7 @@ private List<AxisValue> getAxisValuesY(){
     }
 ```
 
-<<<<<<< HEAD
-```javascript
-=======
 ```java
->>>>>>> 4fb7a1e93258d9a5d10a87b995a6f7e3c7db4cd7
 
 Axis axisX = new Axis(getAxisValuesX());
 axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
@@ -101,12 +97,20 @@ fuckLineChart.setLine(getFoldLine());
 
 使用类似折线图
 
-###2.1 效果图
+###2.1  设置
+- 直方图宽度
+- 边框宽度、颜色
+- 是否填充
+-   是否有标签
+-  标签背景色、弧度
+
+
+###2.2 效果图
 
 ![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square.png)
 
 
-
+![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square2.png)
 
 
 

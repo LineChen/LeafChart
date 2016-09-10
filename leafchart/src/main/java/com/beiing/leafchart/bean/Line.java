@@ -63,30 +63,6 @@ public class Line extends ChartData{
         return labelRadius;
     }
 
-    public Line setLabelRadius(float labelRadius) {
-        this.labelRadius = labelRadius;
-        return this;
-    }
-
-    public boolean isHasLabels() {
-        return hasLabels;
-    }
-
-    public Line setHasLabels(boolean hasLabels) {
-        this.hasLabels = hasLabels;
-        return this;
-    }
-
-    public int getLabelColor() {
-        return labelColor;
-    }
-
-    public Line setLabelColor(int labelColor) {
-        this.labelColor = labelColor;
-        return this;
-    }
-
-
     public int getPointColor() {
         return pointColor;
     }

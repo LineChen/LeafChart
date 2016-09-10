@@ -9,7 +9,7 @@ import java.util.List;
  * Created by chenliu on 2016/7/17 0017<br/>.
  * 描述：不同类型图表相同属性
  */
-public abstract class ChartData {
+public class ChartData {
 
     protected List<PointValue> values = new ArrayList<>();
 
@@ -28,6 +28,32 @@ public abstract class ChartData {
         return this;
     }
 
+    public boolean isHasLabels() {
+        return hasLabels;
+    }
+
+    public ChartData setHasLabels(boolean hasLabels) {
+        this.hasLabels = hasLabels;
+        return this;
+    }
+
+    public int getLabelColor() {
+        return labelColor;
+    }
+
+    public ChartData setLabelColor(int labelColor) {
+        this.labelColor = labelColor;
+        return this;
+    }
+
+    public float getLabelRadius() {
+        return labelRadius;
+    }
+
+    public ChartData setLabelRadius(float labelRadius) {
+        this.labelRadius = labelRadius;
+        return this;
+    }
 }
 
 

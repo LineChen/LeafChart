@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.beiing.leafchart.bean.Axis;
 import com.beiing.leafchart.bean.AxisValue;
+import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.Chart;
 import com.beiing.leafchart.support.LeafUtil;
@@ -159,10 +160,6 @@ public abstract class AbsLeafChart extends View implements Chart{
         setPointsLoc();
     }
 
-    protected abstract void resetPointWeight();
-
-    protected abstract void setPointsLoc();
-
     /**
      * 坐标轴
      * @param canvas
@@ -250,6 +247,118 @@ public abstract class AbsLeafChart extends View implements Chart{
         }
     }
 
+    /**
+     * 画标签
+     * @param canvas
+     * @param chartData
+     */
+    protected void drawLabels(Canvas canvas, ChartData chartData) {
+        if (chartData != null) {
+            if(chartData.isHasLabels()){
+                labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
+
+                Paint.FontMetrics fontMetrics = labelPaint.getFontMetrics();
+                List<PointValue> values = chartData.getValues();
+                int size = values.size();
+                for (int i = 0; i < size; i++) {
+                    PointValue point = values.get(i);
+                    String label = point.getLabel();
+                    Rect bounds = new Rect();
+                    int length = label.length();
+                    labelPaint.getTextBounds(label, 0, length, bounds);
+
+                    float textW = bounds.width();
+                    float textH = bounds.height();
+                    float left, top, right, bottom;
+                    if(length == 1){
+                        left = point.getOriginX() - textW * 2.2f;
+                        right = point.getOriginX() + textW * 2.2f;
+                    }  else if(length == 2){
+                        left = point.getOriginX() - textW * 1.0f;
+                        right = point.getOriginX() + textW * 1.0f;
+                    } else {
+                        left = point.getOriginX() - textW * 0.6f;
+                        right = point.getOriginX() + textW * 0.6f;
+                    }
+                    top = point.getOriginY() - 2.5f*textH;
+                    bottom = point.getOriginY() - 0.5f*textH;
+
+//                    if(i > 0){
+//                        PointValue prePoint = values.get(i - 1);
+//                        RectF rectF = prePoint.getRectF();
+//                        if(left <= rectF.right){
+//                            // 左边与上一个标签重叠
+//                            top = point.getOriginY() + 1.7f*textH;
+//                            bottom = point.getOriginY() + 0.5f*textH;
+//                        }
+//                    }
+
+                    //控制位置
+                    if(left < 0){
+                        left = leftPadding;
+                        right += leftPadding;
+                    }
+                    if(top < 0){
+                        top = topPadding;
+                        bottom += topPadding;
+                    }
+                    if(right > mWidth){
+                        right -= rightPadding;
+                        left -= rightPadding;
+                    }
+
+                    RectF rectF = new RectF(left, top, right, bottom);
+                    float labelRadius = LeafUtil.dp2px(mContext,chartData.getLabelRadius());
+                    labelPaint.setColor(chartData.getLabelColor());
+                    canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
+
+                    //drawText
+                    labelPaint.setColor(Color.WHITE);
+                    float xCoordinate = left + (right - left - textW) / 2;
+                    float yCoordinate = bottom - (bottom - top - textH) / 2 ;
+                    canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
+                }
+            }
+        }
+    }
+
+    protected abstract void resetPointWeight();
+
+    protected abstract void setPointsLoc();
+
+    protected void resetPointWeight(ChartData chartData) {
+        if(chartData != null && axisX != null && axisY != null){
+            List<PointValue> values = chartData.getValues();
+            int size = values.size();
+
+            List<AxisValue> axisValuesX = axisX.getValues();
+            List<AxisValue> axisValuesY = axisY .getValues();
+            float totalWidth = Math.abs(axisValuesX.get(0).getPointX() - axisValuesX.get(axisValuesX.size() - 1).getPointX());
+
+            float totalHeight = Math.abs(axisValuesY.get(0).getPointY() - axisValuesY.get(axisValuesY.size() - 1).getPointY());
+            for (int i = 0; i < size; i++) {
+                PointValue pointValue = values.get(i);
+                float diffX = pointValue.getX() * totalWidth;
+                pointValue.setDiffX(diffX);
+
+                float diffY = pointValue.getY() * totalHeight;
+                pointValue.setDiffY(diffY);
+            }
+        }
+    }
+
+    protected void setPointsLoc(ChartData chartData) {
+        if(chartData != null){
+            List<PointValue> values = chartData.getValues();
+            int size = values.size();
+            for (int i = 0; i < size; i++) {
+                PointValue point1 = values.get(i);
+                float originX1 = point1.getDiffX() + leftPadding + startMarginX;
+                float originY1 = mHeight - bottomPadding - point1.getDiffY() - startMarginY;
+                point1.setOriginX(originX1).setOriginY(originY1);
+            }
+        }
+    }
 
     @Override
     public void setAxisX(Axis axisX) {

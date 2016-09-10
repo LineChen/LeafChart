@@ -111,9 +111,12 @@ public class LeafChartActivity extends AppCompatActivity {
         }
 
         Line line = new Line(pointValues);
-        line.setLineColor(Color.parseColor("#33B5E5")).setPointColor(Color.YELLOW).
-                setCubic(true).setPointRadius(5).setHasLabels(true)
-                .setFill(true);
+        line.setLineColor(Color.parseColor("#33B5E5"))
+                .setPointColor(Color.YELLOW)
+                .setCubic(true)
+                .setFill(true)
+                .setPointRadius(5)
+                .setHasLabels(true);
         return line;
     }
 
@@ -122,14 +125,18 @@ public class LeafChartActivity extends AppCompatActivity {
         for (int i = 1; i <= 12; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 11f);
-            float var = (float) (Math.random() * 100);
+            int var = (int) (Math.random() * 100);
             pointValue.setLabel(String.valueOf(var));
-            pointValue.setY(var / 100);
+            pointValue.setY(var / 100f);
             pointValues.add(pointValue);
         }
 
         Square square = new Square(pointValues);
-        square.setBorderColor(Color.parseColor("#FF4081")).setWidth(20).setFill(true);
+        square.setBorderColor(Color.parseColor("#FF4081"))
+                .setWidth(20)
+                .setFill(true)
+                .setHasLabels(true)
+                .setLabelColor(Color.parseColor("#FF4081"));
         return square;
     }
 

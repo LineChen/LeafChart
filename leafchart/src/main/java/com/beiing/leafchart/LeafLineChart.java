@@ -53,24 +53,7 @@ public class LeafLineChart extends AbsLeafChart {
      */
     @Override
     protected void resetPointWeight() {
-        if(line != null && axisX != null && axisY != null){
-            List<PointValue> values = line.getValues();
-            int size = values.size();
-
-            List<AxisValue> axisValuesX = axisX.getValues();
-            List<AxisValue> axisValuesY = axisY .getValues();
-            float totalWidth = Math.abs(axisValuesX.get(0).getPointX() - axisValuesX.get(axisValuesX.size() - 1).getPointX());
-
-            float totalHeight = Math.abs(axisValuesY.get(0).getPointY() - axisValuesY.get(axisValuesY.size() - 1).getPointY());
-            for (int i = 0; i < size; i++) {
-                PointValue pointValue = values.get(i);
-                float diffX = pointValue.getX() * totalWidth;
-                pointValue.setDiffX(diffX);
-
-                float diffY = pointValue.getY() * totalHeight;
-                pointValue.setDiffY(diffY);
-            }
-        }
+        super.resetPointWeight(line);
     }
 
     /**
@@ -78,16 +61,7 @@ public class LeafLineChart extends AbsLeafChart {
    */
     @Override
     protected void setPointsLoc() {
-        if(line != null){
-            List<PointValue> values = line.getValues();
-            int size = values.size();
-            for (int i = 0; i < size; i++) {
-                PointValue point1 = values.get(i);
-                float originX1 = point1.getDiffX() + leftPadding + startMarginX;
-                float originY1 = mHeight - bottomPadding - point1.getDiffY() - startMarginY;
-                point1.setOriginX(originX1).setOriginY(originY1);
-            }
-        }
+       super.setPointsLoc(line);
     }
 
     @Override
@@ -106,7 +80,11 @@ public class LeafLineChart extends AbsLeafChart {
             }
         }
         drawPoints(canvas);
-        drawLabels(canvas);
+
+        if (line != null && line.isHasLabels()) {
+            super.drawLabels(canvas, line);
+        }
+
     }
 
 
@@ -269,81 +247,6 @@ public class LeafLineChart extends AbsLeafChart {
             }
         }
     }
-
-    /**
-     * 画每一个点上的标签
-     * @param canvas
-     */
-    protected void drawLabels(Canvas canvas) {
-        if (line != null) {
-            if(line.isHasLabels()){
-                labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
-
-                Paint.FontMetrics fontMetrics = labelPaint.getFontMetrics();
-                List<PointValue> values = line.getValues();
-                int size = values.size();
-                for (int i = 0; i < size; i++) {
-                    PointValue point = values.get(i);
-                    String label = point.getLabel();
-                    Rect bounds = new Rect();
-                    int length = label.length();
-                    labelPaint.getTextBounds(label, 0, length, bounds);
-
-                    float textW = bounds.width();
-                    float textH = bounds.height();
-                    float left, top, right, bottom;
-                    if(length == 1){
-                        left = point.getOriginX() - textW * 2.2f;
-                        right = point.getOriginX() + textW * 2.2f;
-                    }  else if(length == 2){
-                        left = point.getOriginX() - textW * 1.0f;
-                        right = point.getOriginX() + textW * 1.0f;
-                    } else {
-                        left = point.getOriginX() - textW * 0.6f;
-                        right = point.getOriginX() + textW * 0.6f;
-                    }
-                    top = point.getOriginY() - 2.5f*textH;
-                    bottom = point.getOriginY() - 0.5f*textH;
-
-//                    if(i > 0){
-//                        PointValue prePoint = values.get(i - 1);
-//                        RectF rectF = prePoint.getRectF();
-//                        if(left <= rectF.right){
-//                            // 左边与上一个标签重叠
-//                            top = point.getOriginY() + 1.7f*textH;
-//                            bottom = point.getOriginY() + 0.5f*textH;
-//                        }
-//                    }
-
-                    //控制位置
-                    if(left < 0){
-                        left = leftPadding;
-                        right += leftPadding;
-                    }
-                    if(top < 0){
-                        top = topPadding;
-                        bottom += topPadding;
-                    }
-                    if(right > mWidth){
-                        right -= rightPadding;
-                        left -= rightPadding;
-                    }
-
-                    RectF rectF = new RectF(left, top, right, bottom);
-                    float labelRadius = LeafUtil.dp2px(mContext,line.getLabelRadius());
-                    labelPaint.setColor(line.getLabelColor());
-                    canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
-
-                    //drawText
-                    labelPaint.setColor(Color.WHITE);
-                    float xCoordinate = left + (right - left - textW) / 2;
-                    float yCoordinate = bottom - (bottom - top - textH) / 2 ;
-                    canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
-                }
-            }
-        }
-    }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

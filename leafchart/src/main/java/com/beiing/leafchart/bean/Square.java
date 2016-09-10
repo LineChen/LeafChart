@@ -71,9 +71,6 @@ public class Square extends ChartData {
         isFill = fill;
         return this;
     }
-
-
-
 }
 
 
