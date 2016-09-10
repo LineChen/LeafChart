@@ -2,7 +2,9 @@ package com.beiing.leafchart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
@@ -48,6 +50,8 @@ public class LeafSquareChart extends AbsLeafChart {
         super.onDraw(canvas);
 
         drawSquares(canvas);
+
+        drawLabels(canvas);
     }
 
     private void drawSquares(Canvas canvas) {
@@ -68,6 +72,80 @@ public class LeafSquareChart extends AbsLeafChart {
             }
         }
     }
+
+    /**
+     * 画每一个点上的标签
+     * @param canvas
+     */
+//    protected void drawLabels(Canvas canvas) {
+//        if (square != null) {
+//            if(square.isHasLabels()){
+//                labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
+//
+//                Paint.FontMetrics fontMetrics = labelPaint.getFontMetrics();
+//                List<PointValue> values = square.getValues();
+//                int size = values.size();
+//                for (int i = 0; i < size; i++) {
+//                    PointValue point = values.get(i);
+//                    String label = point.getLabel();
+//                    Rect bounds = new Rect();
+//                    int length = label.length();
+//                    labelPaint.getTextBounds(label, 0, length, bounds);
+//
+//                    float textW = bounds.width();
+//                    float textH = bounds.height();
+//                    float left, top, right, bottom;
+//                    if(length == 1){
+//                        left = point.getOriginX() - textW * 2.2f;
+//                        right = point.getOriginX() + textW * 2.2f;
+//                    }  else if(length == 2){
+//                        left = point.getOriginX() - textW * 1.0f;
+//                        right = point.getOriginX() + textW * 1.0f;
+//                    } else {
+//                        left = point.getOriginX() - textW * 0.6f;
+//                        right = point.getOriginX() + textW * 0.6f;
+//                    }
+//                    top = point.getOriginY() - 2.5f*textH;
+//                    bottom = point.getOriginY() - 0.5f*textH;
+//
+////                    if(i > 0){
+////                        PointValue prePoint = values.get(i - 1);
+////                        RectF rectF = prePoint.getRectF();
+////                        if(left <= rectF.right){
+////                            // 左边与上一个标签重叠
+////                            top = point.getOriginY() + 1.7f*textH;
+////                            bottom = point.getOriginY() + 0.5f*textH;
+////                        }
+////                    }
+//
+//                    //控制位置
+//                    if(left < 0){
+//                        left = leftPadding;
+//                        right += leftPadding;
+//                    }
+//                    if(top < 0){
+//                        top = topPadding;
+//                        bottom += topPadding;
+//                    }
+//                    if(right > mWidth){
+//                        right -= rightPadding;
+//                        left -= rightPadding;
+//                    }
+//
+//                    RectF rectF = new RectF(left, top, right, bottom);
+//                    float labelRadius = LeafUtil.dp2px(mContext,square.getLabelRadius());
+//                    labelPaint.setColor(square.getLabelColor());
+//                    canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
+//
+//                    //drawText
+//                    labelPaint.setColor(Color.WHITE);
+//                    float xCoordinate = left + (right - left - textW) / 2;
+//                    float yCoordinate = bottom - (bottom - top - textH) / 2 ;
+//                    canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
+//                }
+//            }
+//        }
+//    }
 
     @Override
     protected void resetPointWeight() {
