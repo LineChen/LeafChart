@@ -19,6 +19,15 @@ public abstract class ChartData {
 
     protected float labelRadius = 3; //dp
 
+    public List<PointValue> getValues() {
+        return values;
+    }
+
+    public ChartData setValues(List<PointValue> values) {
+        this.values = values;
+        return this;
+    }
+
 }
 
 

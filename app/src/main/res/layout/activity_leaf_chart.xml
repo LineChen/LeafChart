@@ -28,6 +28,15 @@
         android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#ffffff"/>
+        android:background="#ffffff"
+        android:visibility="gone"/>
+
+
+    <com.beiing.leafchart.LeafSquareChart
+        android:id="@+id/leaf_square_chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#ffffff"
+        />
 
 </LinearLayout>
