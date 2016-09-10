@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="AbsLeafChart">
+        <attr name="startMarginX" format="dimension"/>
+        
+        <attr name="startMarginY" format="dimension"/>
+    </declare-styleable>
+
+</resources>

@@ -1,6 +1,7 @@
 package com.beiing.leafchart;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -57,8 +58,21 @@ public abstract class AbsLeafChart extends View implements Chart{
     public AbsLeafChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+
+        initAttrs(attrs);
+
         initPaint();
     }
+
+    private void initAttrs(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
+            startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
+            startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginY, 0);
+            ta.recycle();
+        }
+    }
+
 
     protected void initPaint() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -36,8 +36,7 @@ public class LeafSquareChart extends AbsLeafChart {
     public LeafSquareChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        startMarginX = (int) LeafUtil.dp2px(context, 20);
-        startMarginY = (int) LeafUtil.dp2px(context, 0);
+        if(startMarginX == 0) startMarginX = (int) LeafUtil.dp2px(context, 20);
     }
 
     @Override

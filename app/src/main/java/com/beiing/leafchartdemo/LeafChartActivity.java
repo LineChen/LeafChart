@@ -134,7 +134,7 @@ public class LeafChartActivity extends AppCompatActivity {
         Square square = new Square(pointValues);
         square.setBorderColor(Color.parseColor("#FF4081"))
                 .setWidth(20)
-                .setFill(true)
+                .setFill(false)
                 .setHasLabels(true)
                 .setLabelColor(Color.parseColor("#FF4081"));
         return square;
