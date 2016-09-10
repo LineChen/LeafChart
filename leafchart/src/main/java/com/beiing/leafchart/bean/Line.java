@@ -12,14 +12,14 @@ import java.util.List;
  */
 public class Line extends ChartData{
     private int lineColor = Color.GRAY; //折线颜色
-    private float lineWidth = 1; // 折线的宽度dp
+    private int lineWidth = 1; // 折线的宽度dp
     private boolean hasPoints = true; //是否画圆点
 
     private boolean hasLines = true; // 是否画线条
 
     private int pointColor = Color.GRAY;//圆点颜色
 
-    private float pointRadius = 1;//圆点半径dp
+    private int pointRadius = 1;//圆点半径dp
 
     private boolean isCubic; //是否是曲线
 
@@ -100,7 +100,7 @@ public class Line extends ChartData{
         return pointRadius;
     }
 
-    public Line setPointRadius(float pointRadius) {
+    public Line setPointRadius(int pointRadius) {
         this.pointRadius = pointRadius;
         return this;
     }
@@ -118,7 +118,7 @@ public class Line extends ChartData{
         return lineWidth;
     }
 
-    public Line setLineWidth(float lineWidth) {
+    public Line setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
         return this;
     }
