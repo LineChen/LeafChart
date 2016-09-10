@@ -32,14 +32,15 @@ public class LeafChartActivity extends AppCompatActivity {
         //测试折线图
         initLineChart();
 
+        //测试直方图
         initSquareChart();
     }
 
     private void initSquareChart() {
         Axis axisX = new Axis(getAxisValuesX());
-        axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(false);
+        axisX.setAxisColor(Color.parseColor("#FF4081")).setTextColor(Color.DKGRAY).setHasLines(false);
         Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
+        axisY.setAxisColor(Color.parseColor("#FF4081")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
 
         leafSquareChart.setAxisX(axisX);
         leafSquareChart.setAxisY(axisY);
@@ -118,7 +119,7 @@ public class LeafChartActivity extends AppCompatActivity {
 
     private Square getSquares(){
         List<PointValue> pointValues = new ArrayList<>();
-        for (int i = 3; i <= 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 11f);
             float var = (float) (Math.random() * 100);

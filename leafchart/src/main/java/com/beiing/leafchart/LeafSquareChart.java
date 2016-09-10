@@ -33,6 +33,9 @@ public class LeafSquareChart extends AbsLeafChart {
 
     public LeafSquareChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        startMarginX = (int) LeafUtil.dp2px(context, 20);
+        startMarginY = (int) LeafUtil.dp2px(context, 0);
     }
 
     @Override
@@ -95,8 +98,8 @@ public class LeafSquareChart extends AbsLeafChart {
             int size = values.size();
             for (int i = 0; i < size; i++) {
                 PointValue point1 = values.get(i);
-                float originX1 = point1.getDiffX() + leftPadding;
-                float originY1 = mHeight - bottomPadding - point1.getDiffY();
+                float originX1 = point1.getDiffX() + leftPadding + startMarginX;
+                float originY1 = mHeight - bottomPadding - point1.getDiffY() - startMarginY;
                 point1.setOriginX(originX1).setOriginY(originY1);
             }
         }

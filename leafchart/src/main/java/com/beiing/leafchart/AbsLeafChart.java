@@ -24,8 +24,16 @@ import java.util.List;
  */
 public abstract class AbsLeafChart extends View implements Chart{
 
-    protected Axis axisX;
+    /**
+     * 第一个点距y轴距离
+     */
+    protected int startMarginX = 0;
+    /**
+     * 第一个点距x轴距离
+     */
+    protected int startMarginY = 0;
 
+    protected Axis axisX;
     protected Axis axisY;
 
     protected float mWidth;//控件宽度
@@ -36,7 +44,6 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected Paint paint;
     protected Paint linePaint;
     protected Paint labelPaint;
-
 
     public AbsLeafChart(Context context) {
         this(context, null, 0);
@@ -58,7 +65,6 @@ public abstract class AbsLeafChart extends View implements Chart{
         linePaint.setStrokeCap(Paint.Cap.ROUND);
         labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
-
 
     /**
      * 不重写改方法，在布局中使用 wrap_content 显示效果是 match_parent
@@ -92,7 +98,6 @@ public abstract class AbsLeafChart extends View implements Chart{
         resetPointWeight();
     }
 
-
     protected void initViewSize() {
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
@@ -109,32 +114,32 @@ public abstract class AbsLeafChart extends View implements Chart{
         if(axisX != null){
             List<AxisValue> values = axisX.getValues();
             int sizeX = values.size(); //几条y轴
-            float xStep = (mWidth - leftPadding) / sizeX;
+            float xStep = (mWidth - leftPadding - startMarginX) / sizeX;
             for (int i = 0; i < sizeX; i++) {
                 AxisValue axisValue = values.get(i);
                 axisValue.setPointY(mHeight);
                 if(i == 0){
-                    axisValue.setPointX(leftPadding);
+                    axisValue.setPointX(leftPadding + startMarginX);
                 } else {
-                    axisValue.setPointX(leftPadding + xStep * i);
+                    axisValue.setPointX(leftPadding + startMarginX + xStep * i);
                 }
             }
 
-            axisX.setStartX(0).setStartY(mHeight - bottomPadding)
+            axisX.setStartX(leftPadding).setStartY(mHeight - bottomPadding)
                     .setStopX(mWidth).setStopY(mHeight - bottomPadding);
         }
 
         if(axisY != null){
             List<AxisValue> values = axisY.getValues();
             int sizeY = values.size(); //几条x轴
-            float yStep = (mHeight - topPadding - bottomPadding) / sizeY;
+            float yStep = (mHeight - topPadding - bottomPadding - startMarginY) / sizeY;
             for (int i = 0; i < sizeY; i++) {
                 AxisValue axisValue = values.get(i);
                 axisValue.setPointX(leftPadding);
                 if(i == 0){
-                    axisValue.setPointY(mHeight - bottomPadding );
+                    axisValue.setPointY(mHeight - bottomPadding - startMarginY);
                 } else {
-                    axisValue.setPointY(mHeight - bottomPadding - yStep * i);
+                    axisValue.setPointY(mHeight - bottomPadding - startMarginY - yStep * i);
                 }
             }
             axisY.setStartX(leftPadding).setStartY(mHeight - bottomPadding)
