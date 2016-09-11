@@ -16,9 +16,9 @@
 
 
 ### 1.2 效果图
-![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/cubic_filled.png)
+![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line1.gif)
 
-![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/fold_not_filled.png)
+![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line2.gif)
 
 ### 1.3 使用
 

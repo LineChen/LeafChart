@@ -96,7 +96,7 @@ public class LeafChartActivity extends AppCompatActivity {
                 .setPointColor(Color.YELLOW)
                 .setCubic(true)
                 .setPointRadius(3)
-                .setFill(true)
+                .setFill(false)
                 .setHasLabels(true)
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
