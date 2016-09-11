@@ -5,6 +5,13 @@
         <attr name="startMarginX" format="dimension"/>
         
         <attr name="startMarginY" format="dimension"/>
+        
+        <attr name="coordinateMode">
+            <enum name="across" value="1"/>
+            <enum name="intersect" value="2"/>
+            <enum name="x_across" value="3"/>
+            <enum name="y_across" value="4"/>
+        </attr>
     </declare-styleable>
 
 </resources>

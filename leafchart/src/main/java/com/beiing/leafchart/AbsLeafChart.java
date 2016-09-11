@@ -26,6 +26,34 @@ import java.util.List;
  */
 public abstract class AbsLeafChart extends View implements Chart{
 
+    private static class Mode{
+        /**
+         * 交叉，x、y轴都超出0点
+         */
+        public static final int ACROSS = 1;
+
+        /**
+         * 相交， x、y轴交于0点
+         */
+        public static final int INTERSECT = 2;
+
+        /**
+         * x轴超出0点
+         */
+        public static final int X_ACROSS = 3;
+
+        /**
+         * y轴超出0点
+         */
+        public static final int Y_ACROSS = 4;
+
+    }
+
+    /**
+     * 坐标轴原点处模式
+     */
+    protected int coordinateMode;
+
     /**
      * 第一个点距y轴距离
      */
@@ -43,8 +71,17 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected float leftPadding, topPadding, rightPadding, bottomPadding;//控件内部间隔
 
     protected Context mContext;
+    /**
+     * 坐标轴
+     */
     protected Paint paint;
+    /**
+     * 折线图、直方图
+     */
     protected Paint linePaint;
+    /**
+     * 标签
+     */
     protected Paint labelPaint;
 
     public AbsLeafChart(Context context) {
@@ -69,6 +106,7 @@ public abstract class AbsLeafChart extends View implements Chart{
             TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
             startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
             startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginY, 0);
+            coordinateMode = ta.getInteger(R.styleable.AbsLeafChart_coordinateMode, Mode.INTERSECT);
             ta.recycle();
         }
     }
@@ -140,8 +178,18 @@ public abstract class AbsLeafChart extends View implements Chart{
                 }
             }
 
-            axisX.setStartX(leftPadding).setStartY(mHeight - bottomPadding)
-                    .setStopX(mWidth).setStopY(mHeight - bottomPadding);
+            switch (coordinateMode){
+                case Mode.ACROSS:
+                case Mode.X_ACROSS:
+                    axisX.setStartX(leftPadding * 0.5f);
+                    break;
+
+                case Mode.INTERSECT:
+                case Mode.Y_ACROSS:
+                    axisX.setStartX(leftPadding);
+                    break;
+            }
+            axisX.setStartY(mHeight - bottomPadding).setStopX(mWidth).setStopY(mHeight - bottomPadding);
         }
 
         if(axisY != null){
@@ -157,8 +205,19 @@ public abstract class AbsLeafChart extends View implements Chart{
                     axisValue.setPointY(mHeight - bottomPadding - startMarginY - yStep * i);
                 }
             }
-            axisY.setStartX(leftPadding).setStartY(mHeight - bottomPadding)
-                    .setStopX(leftPadding).setStopY(0);
+            switch (coordinateMode){
+                case Mode.ACROSS:
+                case Mode.Y_ACROSS:
+                    axisY.setStartY(mHeight - bottomPadding * 0.5f);
+                    break;
+
+                case Mode.INTERSECT:
+                case Mode.X_ACROSS:
+                    axisY.setStartY(mHeight - bottomPadding);
+                    break;
+            }
+            axisY.setStartX(leftPadding).setStopX(leftPadding).setStopY(0);
+
         }
     }
 
