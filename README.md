@@ -90,6 +90,11 @@ fuckLineChart.setAxisX(axisX);
 fuckLineChart.setAxisY(axisY);
 fuckLineChart.setLine(getFoldLine());
 
+//动画显示
+fuckLineChart.showWithAnimation(3000);
+
+//无动画
+//fuckLineChart.show();
 ```
 
 

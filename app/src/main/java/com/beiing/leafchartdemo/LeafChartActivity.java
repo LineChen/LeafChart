@@ -57,6 +57,8 @@ public class LeafChartActivity extends AppCompatActivity {
         fuckLineChart.setChartData(getFoldLine());
 
         fuckLineChart.showWithAnimation(3000);
+
+//        fuckLineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -96,7 +98,7 @@ public class LeafChartActivity extends AppCompatActivity {
                 .setPointColor(Color.YELLOW)
                 .setCubic(true)
                 .setPointRadius(3)
-                .setFill(false)
+                .setFill(true)
                 .setHasLabels(true)
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
