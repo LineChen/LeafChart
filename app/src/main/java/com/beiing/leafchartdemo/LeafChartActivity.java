@@ -49,12 +49,14 @@ public class LeafChartActivity extends AppCompatActivity {
 
     private void initLineChart() {
         Axis axisX = new Axis(getAxisValuesX());
-        axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
+        axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true);
         Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
+        axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
         fuckLineChart.setAxisX(axisX);
         fuckLineChart.setAxisY(axisY);
         fuckLineChart.setChartData(getFoldLine());
+
+        fuckLineChart.showWithAnimation(3000);
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -82,41 +84,21 @@ public class LeafChartActivity extends AppCompatActivity {
         for (int i = 1; i <= 12; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 11f);
-            float var = (float) (Math.random() * 100);
+            int var = (int) (Math.random() * 100);
             pointValue.setLabel(String.valueOf(var));
-            pointValue.setY(var / 100);
-            pointValues.add(pointValue);
-        }
-
-        Line line = new Line(pointValues);
-        line.setLineColor(Color.parseColor("#33B5E5"))                  //设置线条的颜色
-                .setPointColor(Color.YELLOW)                             //设置圆点的颜色
-                .setCubic(false)                                          //设置是否曲线
-                .setPointRadius(3)                                        //设置圆点半径
-                .setFill(false)                                           //设置是否填充
-                .setFillColr(Color.GRAY)                         //设置填充颜色
-                .setHasLabels(false);                                    //设施是否有标签
-        return line;
-    }
-
-    private Line getCubicLine(){
-        List<PointValue> pointValues = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            PointValue pointValue = new PointValue();
-            pointValue.setX( (i - 1) / 11f);
-            float var = (float) (Math.random() * 100);
-            pointValue.setLabel(String.valueOf(var));
-            pointValue.setY(var / 100);
+            pointValue.setY(var / 100f);
             pointValues.add(pointValue);
         }
 
         Line line = new Line(pointValues);
         line.setLineColor(Color.parseColor("#33B5E5"))
+                .setLineWidth(3)
                 .setPointColor(Color.YELLOW)
                 .setCubic(true)
+                .setPointRadius(3)
                 .setFill(true)
-                .setPointRadius(5)
-                .setHasLabels(true);
+                .setHasLabels(true)
+                .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
     }
 

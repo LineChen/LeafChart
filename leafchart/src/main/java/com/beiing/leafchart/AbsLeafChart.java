@@ -164,34 +164,12 @@ public abstract class AbsLeafChart extends View implements Chart{
      * 设置坐标轴位置
      */
     public void resetAsixSize() {
-        if(axisX != null){
-            List<AxisValue> values = axisX.getValues();
-            int sizeX = values.size(); //几条y轴
-            float xStep = (mWidth - leftPadding - startMarginX) / sizeX;
-            for (int i = 0; i < sizeX; i++) {
-                AxisValue axisValue = values.get(i);
-                axisValue.setPointY(mHeight);
-                if(i == 0){
-                    axisValue.setPointX(leftPadding + startMarginX);
-                } else {
-                    axisValue.setPointX(leftPadding + startMarginX + xStep * i);
-                }
-            }
+        resetAsixX();
 
-            switch (coordinateMode){
-                case Mode.ACROSS:
-                case Mode.X_ACROSS:
-                    axisX.setStartX(leftPadding * 0.5f);
-                    break;
+        resetAsixY();
+    }
 
-                case Mode.INTERSECT:
-                case Mode.Y_ACROSS:
-                    axisX.setStartX(leftPadding);
-                    break;
-            }
-            axisX.setStartY(mHeight - bottomPadding).setStopX(mWidth).setStopY(mHeight - bottomPadding);
-        }
-
+    private void resetAsixY() {
         if(axisY != null){
             List<AxisValue> values = axisY.getValues();
             int sizeY = values.size(); //几条x轴
@@ -221,6 +199,36 @@ public abstract class AbsLeafChart extends View implements Chart{
         }
     }
 
+    private void resetAsixX() {
+        if(axisX != null){
+            List<AxisValue> values = axisX.getValues();
+            int sizeX = values.size(); //几条y轴
+            float xStep = (mWidth - leftPadding - startMarginX) / sizeX;
+            for (int i = 0; i < sizeX; i++) {
+                AxisValue axisValue = values.get(i);
+                axisValue.setPointY(mHeight);
+                if(i == 0){
+                    axisValue.setPointX(leftPadding + startMarginX);
+                } else {
+                    axisValue.setPointX(leftPadding + startMarginX + xStep * i);
+                }
+            }
+
+            switch (coordinateMode){
+                case Mode.ACROSS:
+                case Mode.X_ACROSS:
+                    axisX.setStartX(leftPadding * 0.5f);
+                    break;
+
+                case Mode.INTERSECT:
+                case Mode.Y_ACROSS:
+                    axisX.setStartX(leftPadding);
+                    break;
+            }
+            axisX.setStartY(mHeight - bottomPadding).setStopX(mWidth).setStopY(mHeight - bottomPadding);
+        }
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -238,17 +246,6 @@ public abstract class AbsLeafChart extends View implements Chart{
      * @param canvas
      */
     protected void drawCoordinateLines(Canvas canvas) {
-        //X坐标轴
-        paint.setColor(axisX.getAxisColor());
-        paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
-        canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
-
-        //Y坐标轴
-        paint.setColor(axisY.getAxisColor());
-        paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
-        canvas.drawLine(axisY.getStartX(),
-                axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
-
         if(axisX != null && axisY != null){
             // 平行于y 轴的坐标轴
             if(axisY.isHasLines()){
@@ -256,7 +253,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                 paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisLineWidth()));
                 List<AxisValue> valuesX = axisX.getValues();
                 int sizeX = valuesX.size();
-                for (int i = 1; i < sizeX; i++) {
+                for (int i = 0; i < sizeX; i++) {
                     AxisValue value = valuesX.get(i);
                     canvas.drawLine(value.getPointX(),
                             axisY.getStartY() - LeafUtil.dp2px(mContext, axisY.getAxisWidth()),
@@ -270,7 +267,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                 paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisX.getAxisLineWidth()));
                 List<AxisValue> valuesY = axisY.getValues();
                 int sizeY = valuesY.size();
-                for (int i = 1; i < sizeY; i++) {
+                for (int i = 0; i < sizeY; i++) {
                     AxisValue value = valuesY.get(i);
                     canvas.drawLine(axisY.getStartX() + LeafUtil.dp2px(mContext, axisX.getAxisWidth()),
                             value.getPointY(),
@@ -279,6 +276,18 @@ public abstract class AbsLeafChart extends View implements Chart{
                 }
             }
         }
+
+        //X坐标轴
+        paint.setColor(axisX.getAxisColor());
+        paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
+        canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
+
+        //Y坐标轴
+        paint.setColor(axisY.getAxisColor());
+        paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
+        canvas.drawLine(axisY.getStartX(),
+                axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
+
     }
 
     /**

@@ -1,16 +1,19 @@
 package com.beiing.leafchart;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.PathEffect;
+import android.graphics.PathMeasure;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
-import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
@@ -28,6 +31,18 @@ public class LeafLineChart extends AbsLeafChart {
     private static final float LINE_SMOOTHNESS = 0.16f;
 
     private Path path = new Path();
+
+    /**
+     * 路径总长度
+     */
+    private float pathLength;
+
+    /**
+     * 动画结束标志
+     */
+    private boolean isAnimateEnd = false;
+
+    private float phase;
 
     private Line line;
 
@@ -79,9 +94,9 @@ public class LeafLineChart extends AbsLeafChart {
                 drawFillArea(canvas);
             }
         }
-        drawPoints(canvas);
 
-        if (line != null && line.isHasLabels()) {
+        drawPoints(canvas);
+        if (line != null && line.isHasLabels() && isAnimateEnd) {
             super.drawLabels(canvas, line);
         }
 
@@ -105,6 +120,9 @@ public class LeafLineChart extends AbsLeafChart {
                 if(i == 0)  path.moveTo(point.getOriginX(), point.getOriginY());
                 else  path.lineTo(point.getOriginX(), point.getOriginY());
             }
+
+            PathMeasure measure = new PathMeasure(path, false);
+            pathLength = measure.getLength();
 
             canvas.drawPath(path, linePaint);
         }
@@ -196,6 +214,10 @@ public class LeafLineChart extends AbsLeafChart {
                 currentPointX = nextPointX;
                 currentPointY = nextPointY;
             }
+
+            PathMeasure measure = new PathMeasure(path, false);
+            pathLength = measure.getLength();
+
             canvas.drawPath(path, linePaint);
         }
     }
@@ -204,7 +226,7 @@ public class LeafLineChart extends AbsLeafChart {
     /**
      * 填充
      * @param canvas
-     */
+    */
     private void drawFillArea(Canvas canvas) {
         //继续使用前面的 path
         if(line != null && line.getValues().size() > 1){
@@ -224,8 +246,10 @@ public class LeafLineChart extends AbsLeafChart {
             else
                 linePaint.setColor(line.getFillColr());
 
+            canvas.save(Canvas.CLIP_SAVE_FLAG);
+            canvas.clipRect(firstX, 0, phase * (lastX - firstX) + firstX, getMeasuredHeight());
             canvas.drawPath(path, linePaint);
-
+            canvas.restore();
             path.reset();
         }
     }
@@ -235,17 +259,71 @@ public class LeafLineChart extends AbsLeafChart {
      * @param canvas
      */
     protected void drawPoints(Canvas canvas) {
-        if (line != null) {
-            if(line.isHasPoints()){
-                labelPaint.setColor(line.getPointColor());
-                List<PointValue> values = line.getValues();
-                for (PointValue point: values) {
-                    float radius = LeafUtil.dp2px(mContext, line.getPointRadius());
-                    canvas.drawCircle(point.getOriginX(), point.getOriginY(),
-                            radius , labelPaint);
-                }
+        if (line != null && line.isHasPoints()) {
+            labelPaint.setColor(line.getPointColor());
+            List<PointValue> values = line.getValues();
+            for (PointValue point: values) {
+                float radius = LeafUtil.dp2px(mContext, line.getPointRadius());
+                canvas.drawCircle(point.getOriginX(), point.getOriginY(),
+                        radius , labelPaint);
             }
         }
+    }
+
+
+    //showWithAnimation动画开启后会调用该方法
+    public void setPhase(float phase) {
+        linePaint.setPathEffect(createPathEffect(pathLength, phase, 0.0f));
+        invalidate();
+    }
+
+    private PathEffect createPathEffect(float pathLength, float phase, float offset) {
+        return new DashPathEffect(new float[] { phase * pathLength, pathLength }, 0);
+    }
+
+
+    /**
+     * 带动画的绘制
+     * @param duration
+     */
+    public void showWithAnimation(int duration){
+        isAnimateEnd = false;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(this, "phase", 0.0f, 1.0f);
+        animator.setDuration(duration);
+        animator.start();
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                phase = (float) animation.getAnimatedValue();
+            }
+        });
+
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isAnimateEnd = true;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    public void show(){
+        showWithAnimation(0);
     }
 
     @Override
@@ -286,7 +364,6 @@ public class LeafLineChart extends AbsLeafChart {
     public void setChartData(ChartData chartData) {
         this.line = (Line) chartData;
         resetPointWeight();
-        invalidate();
     }
 
     @Override

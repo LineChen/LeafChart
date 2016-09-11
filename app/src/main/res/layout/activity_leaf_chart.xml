@@ -29,8 +29,8 @@
         android:id="@+id/leaf_chart"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#ffffff"
-        android:visibility="gone"/>
+        android:visibility="visible"
+        />
 
 
     <com.beiing.leafchart.LeafSquareChart
@@ -40,6 +40,7 @@
         android:background="#ffffff"
         app:startMarginX="20dp"
         app:coordinateMode="intersect"
+        android:visibility="gone"
         />
 
 </LinearLayout>
