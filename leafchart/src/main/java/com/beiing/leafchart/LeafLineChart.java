@@ -35,7 +35,9 @@ public class LeafLineChart extends AbsLeafChart {
     /**
      * 路径总长度
      */
-    private float pathLength;
+//    private float pathLength;
+
+    private PathMeasure measure;
 
     /**
      * 动画结束标志
@@ -121,8 +123,8 @@ public class LeafLineChart extends AbsLeafChart {
                 else  path.lineTo(point.getOriginX(), point.getOriginY());
             }
 
-            PathMeasure measure = new PathMeasure(path, false);
-            pathLength = measure.getLength();
+            measure = new PathMeasure(path, false);
+//            pathLength = measure.getLength();
 
             canvas.drawPath(path, linePaint);
         }
@@ -215,9 +217,7 @@ public class LeafLineChart extends AbsLeafChart {
                 currentPointY = nextPointY;
             }
 
-            PathMeasure measure = new PathMeasure(path, false);
-            pathLength = measure.getLength();
-
+            measure = new PathMeasure(path, false);
             canvas.drawPath(path, linePaint);
         }
     }
@@ -273,7 +273,7 @@ public class LeafLineChart extends AbsLeafChart {
 
     //showWithAnimation动画开启后会调用该方法
     public void setPhase(float phase) {
-        linePaint.setPathEffect(createPathEffect(pathLength, phase, 0.0f));
+        linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
         invalidate();
     }
 
