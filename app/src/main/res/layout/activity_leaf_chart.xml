@@ -19,11 +19,12 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
-    <TextView
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LeafLineChart"/>
+        android:text="ChartInFragment"
+        android:onClick="toChartInFragment"
+        android:textAllCaps="false"/>
 
     <com.beiing.leafchart.LeafLineChart
         android:id="@+id/leaf_chart"

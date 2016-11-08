@@ -1,8 +1,10 @@
 package com.beiing.leafchartdemo;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.beiing.leafchart.LeafLineChart;
 import com.beiing.leafchart.LeafSquareChart;
@@ -17,7 +19,7 @@ import java.util.List;
 
 public class LeafChartActivity extends AppCompatActivity {
 
-    LeafLineChart fuckLineChart;
+    LeafLineChart leafLineChart;
 
     LeafSquareChart leafSquareChart;
 
@@ -25,7 +27,7 @@ public class LeafChartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaf_chart);
-        fuckLineChart = (LeafLineChart) findViewById(R.id.leaf_chart);
+        leafLineChart = (LeafLineChart) findViewById(R.id.leaf_chart);
 
         leafSquareChart = (LeafSquareChart) findViewById(R.id.leaf_square_chart);
 
@@ -52,13 +54,13 @@ public class LeafChartActivity extends AppCompatActivity {
         axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true);
         Axis axisY = new Axis(getAxisValuesY());
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
-        fuckLineChart.setAxisX(axisX);
-        fuckLineChart.setAxisY(axisY);
-        fuckLineChart.setChartData(getFoldLine());
+        leafLineChart.setAxisX(axisX);
+        leafLineChart.setAxisY(axisY);
+        leafLineChart.setChartData(getFoldLine());
 
-        fuckLineChart.showWithAnimation(3000);
+        leafLineChart.showWithAnimation(3000);
 
-//        fuckLineChart.show();
+//        leafLineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -124,4 +126,7 @@ public class LeafChartActivity extends AppCompatActivity {
         return square;
     }
 
+    public void toChartInFragment(View view) {
+        startActivity(new Intent(this, ChartInFragmentActivity.class));
+    }
 }

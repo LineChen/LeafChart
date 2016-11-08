@@ -275,19 +275,18 @@ public abstract class AbsLeafChart extends View implements Chart{
                             value.getPointY() , paint);
                 }
             }
+
+            //X坐标轴
+            paint.setColor(axisX.getAxisColor());
+            paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
+            canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
+
+            //Y坐标轴
+            paint.setColor(axisY.getAxisColor());
+            paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
+            canvas.drawLine(axisY.getStartX(),
+                    axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
         }
-
-        //X坐标轴
-        paint.setColor(axisX.getAxisColor());
-        paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
-        canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
-
-        //Y坐标轴
-        paint.setColor(axisY.getAxisColor());
-        paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
-        canvas.drawLine(axisY.getStartX(),
-                axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
-
     }
 
     /**

@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.beiing.leafchartdemo.ChartFragment"
+    android:background="#ffffff">
+
+    <com.beiing.leafchart.LeafLineChart
+        android:id="@+id/leaf_chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:visibility="visible"
+        />
+
+</FrameLayout>
