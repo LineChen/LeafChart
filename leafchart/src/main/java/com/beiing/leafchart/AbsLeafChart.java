@@ -17,6 +17,7 @@ import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.Chart;
 import com.beiing.leafchart.support.LeafUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -139,16 +140,19 @@ public abstract class AbsLeafChart extends View implements Chart{
         } else if(heightSpecMode == MeasureSpec.AT_MOST){
             setMeasuredDimension(widthSpecSize, (int)mHeight);
         }
+
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
         initViewSize();
 
         resetAsixSize();
 
         resetPointWeight();
+
     }
 
     protected void initViewSize() {
@@ -213,6 +217,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                     axisValue.setPointX(leftPadding + startMarginX + xStep * i);
                 }
             }
+
 
             switch (coordinateMode){
                 case Mode.ACROSS:
@@ -444,12 +449,14 @@ public abstract class AbsLeafChart extends View implements Chart{
     @Override
     public void setAxisX(Axis axisX) {
         this.axisX = axisX;
+        resetAsixX();
         invalidate();
     }
 
     @Override
     public void setAxisY(Axis axisY) {
         this.axisY = axisY;
+        resetAsixY();
         invalidate();
     }
 

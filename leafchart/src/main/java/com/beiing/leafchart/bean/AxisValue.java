@@ -46,4 +46,13 @@ public class AxisValue {
     public void setPointY(float pointY) {
         this.pointY = pointY;
     }
+
+    @Override
+    public String toString() {
+        return "AxisValue{" +
+                "label='" + label + '\'' +
+                ", pointX=" + pointX +
+                ", pointY=" + pointY +
+                '}';
+    }
 }

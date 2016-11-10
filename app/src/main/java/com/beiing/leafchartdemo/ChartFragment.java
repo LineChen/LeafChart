@@ -3,6 +3,8 @@ package com.beiing.leafchartdemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,6 +28,13 @@ import java.util.List;
 public class ChartFragment extends Fragment {
 
     LeafLineChart lineChart;
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     public ChartFragment() {
         // Required empty public constructor
@@ -53,7 +62,13 @@ public class ChartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initLineChart();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initLineChart();
+            }
+        }, 2000);
+
     }
 
     private void initLineChart() {
