@@ -3,6 +3,8 @@ package com.beiing.leafchartdemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,9 +25,17 @@ import java.util.List;
  * Use the {@link ChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChartFragment extends Fragment {
+public class ChartFragment extends Fragment{
 
     LeafLineChart lineChart;
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
 
     public ChartFragment() {
         // Required empty public constructor
@@ -53,7 +63,13 @@ public class ChartFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initLineChart();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initLineChart();
+            }
+        }, 2000);
+
     }
 
     private void initLineChart() {
@@ -63,11 +79,22 @@ public class ChartFragment extends Fragment {
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
         lineChart.setAxisX(axisX);
         lineChart.setAxisY(axisY);
-        lineChart.setChartData(getFoldLine());
+//        lineChart.setChartData(getFoldLine());
 
-        lineChart.showWithAnimation(3000);
 
-//        leafLineChart.show();
+//        handler.sendEmptyMessageDelayed(0, 2000);
+
+//        lineChart.showWithAnimation(3000);
+
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                lineChart.showWithAnimation(3000);
+//            }
+//        }, 2000);
+
+//        lineChart.showWithAnimation(3000);
+//        lineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -112,4 +139,5 @@ public class ChartFragment extends Fragment {
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
     }
+
 }
