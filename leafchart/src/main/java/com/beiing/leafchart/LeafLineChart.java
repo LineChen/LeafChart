@@ -73,8 +73,8 @@ public class LeafLineChart extends AbsLeafChart {
     }
 
     /**
-    * 确定每个点所在位置
-   */
+     * 确定每个点所在位置
+     */
     @Override
     protected void setPointsLoc() {
         if (lines != null) {
@@ -91,7 +91,7 @@ public class LeafLineChart extends AbsLeafChart {
         if (lines != null && lines.size() > 0) {
             Line line;
             for (int i = 0, size = lines.size(); i < size; i++) {
-               line = lines.get(i);
+                line = lines.get(i);
                 if(line != null && isShow){
                     if(line.isCubic()) {
                         drawCubicPath(canvas, line);
@@ -239,7 +239,7 @@ public class LeafLineChart extends AbsLeafChart {
     /**
      * 填充
      * @param canvas
-    */
+     */
     private void drawFillArea(Canvas canvas, Line line) {
         //继续使用前面的 path
         if(line != null && line.getValues().size() > 1){

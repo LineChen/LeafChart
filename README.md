@@ -5,13 +5,25 @@
 
 
 ### 1.1 设置
--  坐标轴颜色、宽度
--  坐标轴刻度字体大小、颜色
--  折线或曲线宽度、颜色
--  点的大小、颜色
--  是否有标签
--  标签背景色、弧度
--  是否填充
+
+>坐标轴
+
+-  `Axis.setAxisColor` 	坐标轴颜色
+-  `Axis.setAxisWidth`	坐标轴宽度
+-  `Axis.setTextSize`	坐标轴刻度字体大小
+-  `Axis.setTextColor`	坐标轴刻度字体颜色
+
+>折线
+
+-  `Line.setLineWidth`	折线宽度
+-  `Line.setLineColor`	折线颜色
+-  `Line.setPointRadius`	点的大小
+-  `Line.setPointColor`		点的颜色
+-  `Line.setHasLabels`		是否有标签
+-  `Line.setLabelColor`		标签背景色
+-  `Line.setLabelRadius`	标签弧度
+-  `Line.setFill`		是否填充
+-  `Line.setFillColr`	填充颜色(默认为有透明度的折线颜色)
 
 
 
@@ -19,6 +31,10 @@
 ![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line1.gif)
 
 ![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line2.gif)
+
+多线条支持
+
+![多线条支持](http://)
 
 ### 1.3 使用
 
@@ -82,19 +98,21 @@ private List<AxisValue> getAxisValuesY(){
 
 ```java
 
-Axis axisX = new Axis(getAxisValuesX());
-axisX.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true);
-Axis axisY = new Axis(getAxisValuesY());
-axisY.setAxisColor(Color.parseColor("#7cb342")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
-fuckLineChart.setAxisX(axisX);
-fuckLineChart.setAxisY(axisY);
-fuckLineChart.setLine(getFoldLine());
+ Axis axisX = new Axis(getAxisValuesX());
+        axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true);
+        Axis axisY = new Axis(getAxisValuesY());
+        axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
+        lineChart.setAxisX(axisX);
+        lineChart.setAxisY(axisY);
+        List<Line> lines = new ArrayList<>();
+        lines.add(getFoldLine());
+        lines.add(getCompareLine());
+        lineChart.setChartData(lines);
 
-//动画显示
-fuckLineChart.showWithAnimation(3000);
+        lineChart.showWithAnimation(3000);
 
-//无动画
-//fuckLineChart.show();
+	//无动画
+//lineChart.show();
 ```
 
 
@@ -103,11 +121,13 @@ fuckLineChart.showWithAnimation(3000);
 使用类似折线图
 
 ###2.1  设置
-- 直方图宽度
-- 边框宽度、颜色
-- 是否填充
--   是否有标签
--  标签背景色、弧度
+- `Square.setWidth`	直方图宽度
+- `Square.setBorderWidth`	边框宽度
+- `Square.setBorderColor`	边框颜色
+- `Square.setFill`	是否填充
+- `Square.setHasLabels`  是否有标签
+- `Square.setLabelColor`		标签背景色
+- `Square.setLabelRadius`	标签弧度
 
 
 ###2.2 效果图
