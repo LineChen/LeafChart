@@ -1,7 +1,5 @@
 package com.beiing.leafchart.bean;
 
-import android.graphics.RectF;
-
 /**
  * Created by chenliu on 2016/7/14.<br/>
  * 描述：点

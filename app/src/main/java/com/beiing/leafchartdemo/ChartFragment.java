@@ -78,11 +78,13 @@ public class ChartFragment extends Fragment {
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
         lineChart.setAxisX(axisX);
         lineChart.setAxisY(axisY);
-        lineChart.setChartData(getFoldLine());
+        List<Line> lines = new ArrayList<>();
+        lines.add(getFoldLine());
+        lines.add(getCompareLine());
+        lineChart.setChartData(lines);
 
         lineChart.showWithAnimation(3000);
 
-//        leafLineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -127,4 +129,27 @@ public class ChartFragment extends Fragment {
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
     }
+
+    private Line getCompareLine(){
+        List<PointValue> pointValues = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            PointValue pointValue = new PointValue();
+            pointValue.setX( (i - 1) / 11f);
+            int var = (int) (Math.random() * 100);
+            pointValue.setLabel(String.valueOf(var));
+            pointValue.setY(var / 100f);
+            pointValues.add(pointValue);
+        }
+
+        Line line = new Line(pointValues);
+        line.setLineColor(Color.MAGENTA)
+                .setLineWidth(3)
+                .setPointColor(Color.MAGENTA)
+                .setCubic(true)
+                .setPointRadius(3)
+                .setFill(false)
+                .setHasLabels(false);
+        return line;
+    }
+
 }

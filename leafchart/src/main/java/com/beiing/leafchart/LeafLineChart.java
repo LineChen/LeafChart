@@ -11,9 +11,7 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
-import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.LeafUtil;
@@ -29,13 +27,6 @@ public class LeafLineChart extends AbsLeafChart {
 
     private static final float LINE_SMOOTHNESS = 0.16f;
 
-    private Path path = new Path();
-
-    /**
-     * 路径总长度
-     */
-//    private float pathLength;
-
     private PathMeasure measure;
 
     /**
@@ -50,7 +41,7 @@ public class LeafLineChart extends AbsLeafChart {
 
     private float phase;
 
-    private Line line;
+    private List<Line> lines;
 
     public LeafLineChart(Context context) {
         this(context, null, 0);
@@ -74,7 +65,11 @@ public class LeafLineChart extends AbsLeafChart {
      */
     @Override
     protected void resetPointWeight() {
-        super.resetPointWeight(line);
+        if (lines != null) {
+            for (int i = 0, size = lines.size(); i < size; i++) {
+                super.resetPointWeight(lines.get(i));
+            }
+        }
     }
 
     /**
@@ -82,29 +77,39 @@ public class LeafLineChart extends AbsLeafChart {
    */
     @Override
     protected void setPointsLoc() {
-       super.setPointsLoc(line);
+        if (lines != null) {
+            for (int i = 0, size = lines.size(); i < size; i++) {
+                super.setPointsLoc(lines.get(i));
+            }
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(line != null && isShow){
-            if(line.isCubic()) {
-                drawCubicPath(canvas);
-            } else {
-                drawLines(canvas);
-            }
-            if(line.isFill()){
-                //填充
-                drawFillArea(canvas);
-            }
+        if (lines != null && lines.size() > 0) {
+            Line line;
+            for (int i = 0, size = lines.size(); i < size; i++) {
+               line = lines.get(i);
+                if(line != null && isShow){
+                    if(line.isCubic()) {
+                        drawCubicPath(canvas, line);
+                    } else {
+                        drawLines(canvas, line);
+                    }
+                    if(line.isFill()){
+                        //填充
+                        drawFillArea(canvas, line);
+                    }
 
-            drawPoints(canvas);
-        }
+                    drawPoints(canvas, line);
+                }
 
-        if (line != null && line.isHasLabels() && isAnimateEnd) {
-            super.drawLabels(canvas, line);
+                if (line != null && line.isHasLabels() && isAnimateEnd) {
+                    super.drawLabels(canvas, line);
+                }
+            }
         }
 
     }
@@ -115,12 +120,13 @@ public class LeafLineChart extends AbsLeafChart {
      *
      * @param canvas
      */
-    protected void drawLines(Canvas canvas) {
+    protected void drawLines(Canvas canvas, Line line) {
         if(line != null){
             linePaint.setColor(line.getLineColor());
             linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
             linePaint.setStyle(Paint.Style.STROKE);
             List<PointValue> values = line.getValues();
+            Path path = line.getPath();
             int size = values.size();
             for (int i = 0; i < size; i++) {
                 PointValue point = values.get(i);
@@ -140,11 +146,12 @@ public class LeafLineChart extends AbsLeafChart {
      * 画曲线
      * @param canvas
      */
-    private void drawCubicPath(Canvas canvas) {
+    private void drawCubicPath(Canvas canvas, Line line) {
         if(line != null){
             linePaint.setColor(line.getLineColor());
             linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
             linePaint.setStyle(Paint.Style.STROKE);
+            Path path = line.getPath();
 
             float prePreviousPointX = Float.NaN;
             float prePreviousPointY = Float.NaN;
@@ -233,13 +240,14 @@ public class LeafLineChart extends AbsLeafChart {
      * 填充
      * @param canvas
     */
-    private void drawFillArea(Canvas canvas) {
+    private void drawFillArea(Canvas canvas, Line line) {
         //继续使用前面的 path
         if(line != null && line.getValues().size() > 1){
             List<PointValue> values = line.getValues();
             PointValue firstPoint = values.get(0);
             float firstX = firstPoint.getOriginX();
 
+            Path path = line.getPath();
             PointValue lastPoint = values.get(values.size() - 1);
             float lastX = lastPoint.getOriginX();
             path.lineTo(lastX, axisX.getStartY());
@@ -264,7 +272,7 @@ public class LeafLineChart extends AbsLeafChart {
      * 画圆点
      * @param canvas
      */
-    protected void drawPoints(Canvas canvas) {
+    protected void drawPoints(Canvas canvas, Line line) {
         if (line != null && line.isHasPoints()) {
             labelPaint.setColor(line.getPointColor());
             List<PointValue> values = line.getValues();
@@ -331,48 +339,18 @@ public class LeafLineChart extends AbsLeafChart {
         showWithAnimation(0);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(line != null && line.isHasPoints()){
-            List<PointValue> values = line.getValues();
-            int size = values.size();
-            int touchindex = 0;
-            switch (event.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    for (int i = 0; i < size; i++) {
-                        PointValue point = values.get(i);
-                        if(isInArea(point.getOriginX(), point.getOriginY(), event.getX(), event.getY(), LeafUtil.dp2px(mContext, line.getPointRadius()))){
-                            touchindex = i;
-                            break;
-                        }
-                    }
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                        if(touchindex != 0){
-                            PointValue point = values.get(touchindex);
-                            touchindex = 0;
-                        }
-                    break;
-            }
-        }
-        return super.onTouchEvent(event);
-    }
-
     private boolean isInArea(float x, float y, float touchX, float touchY, float radius) {
         float diffX = touchX - x;
         float diffY = touchY - y;
         return Math.pow(diffX, 2) + Math.pow(diffY, 2) <= 2 * Math.pow(radius, 2);
     }
 
-    @Override
-    public void setChartData(ChartData chartData) {
-        this.line = (Line) chartData;
+    public void setChartData(List<Line> chartDatas) {
+        lines = chartDatas;
         resetPointWeight();
     }
 
-    @Override
-    public ChartData getChartData() {
-        return line;
+    public List<Line> getChartData() {
+        return lines;
     }
 }

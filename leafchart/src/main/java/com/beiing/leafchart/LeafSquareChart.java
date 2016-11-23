@@ -2,13 +2,10 @@ package com.beiing.leafchart;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.Square;
@@ -84,14 +81,11 @@ public class LeafSquareChart extends AbsLeafChart {
        super.setPointsLoc(square);
     }
 
-    @Override
     public void setChartData(ChartData chartData) {
         this.square = (Square) chartData;
         resetPointWeight();
-        invalidate();
     }
 
-    @Override
     public ChartData getChartData() {
         return square;
     }

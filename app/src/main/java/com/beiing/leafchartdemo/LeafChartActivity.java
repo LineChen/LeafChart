@@ -56,7 +56,10 @@ public class LeafChartActivity extends AppCompatActivity {
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
         leafLineChart.setAxisX(axisX);
         leafLineChart.setAxisY(axisY);
-        leafLineChart.setChartData(getFoldLine());
+
+        List<Line> lines = new ArrayList<>();
+        lines.add(getFoldLine());
+        leafLineChart.setChartData(lines);
 
         leafLineChart.showWithAnimation(3000);
 

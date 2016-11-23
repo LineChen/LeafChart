@@ -1,8 +1,8 @@
 package com.beiing.leafchart.bean;
 
 import android.graphics.Color;
+import android.graphics.Path;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  * 描述：线
  * </br>
  */
-public class Line extends ChartData{
+public class Line extends ChartData {
     private int lineColor = Color.GRAY; //折线颜色
     private int lineWidth = 1; // 折线的宽度dp
     private boolean hasPoints = true; //是否画圆点
@@ -27,6 +27,7 @@ public class Line extends ChartData{
 
     private int fillColr = 0; // 填充色
 
+    private Path path = new Path();//折线路径
 
     public Line(List<PointValue> values) {
         this.values = values;
@@ -124,6 +125,14 @@ public class Line extends ChartData{
     public Line setHasLines(boolean hasLines) {
         this.hasLines = hasLines;
         return this;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
     }
 }
 

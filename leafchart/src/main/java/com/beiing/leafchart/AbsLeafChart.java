@@ -17,7 +17,6 @@ import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.Chart;
 import com.beiing.leafchart.support.LeafUtil;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
