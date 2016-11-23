@@ -25,7 +25,7 @@ import java.util.List;
  * Use the {@link ChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChartFragment extends Fragment{
+public class ChartFragment extends Fragment {
 
     LeafLineChart lineChart;
 
@@ -35,7 +35,6 @@ public class ChartFragment extends Fragment{
             super.handleMessage(msg);
         }
     };
-
 
     public ChartFragment() {
         // Required empty public constructor
@@ -79,22 +78,11 @@ public class ChartFragment extends Fragment{
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
         lineChart.setAxisX(axisX);
         lineChart.setAxisY(axisY);
-//        lineChart.setChartData(getFoldLine());
+        lineChart.setChartData(getFoldLine());
 
+        lineChart.showWithAnimation(3000);
 
-//        handler.sendEmptyMessageDelayed(0, 2000);
-
-//        lineChart.showWithAnimation(3000);
-
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                lineChart.showWithAnimation(3000);
-//            }
-//        }, 2000);
-
-//        lineChart.showWithAnimation(3000);
-//        lineChart.show();
+//        leafLineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -139,5 +127,4 @@ public class ChartFragment extends Fragment{
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
     }
-
 }

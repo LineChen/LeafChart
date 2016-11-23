@@ -11,7 +11,6 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.beiing.leafchart.bean.ChartData;
@@ -42,7 +41,12 @@ public class LeafLineChart extends AbsLeafChart {
     /**
      * 动画结束标志
      */
-    private boolean isAnimateEnd = false;
+    private boolean isAnimateEnd;
+
+    /**
+     * 是否开始绘制，防止动画绘制之前绘制一次
+     */
+    private boolean isShow;
 
     private float phase;
 
@@ -85,7 +89,7 @@ public class LeafLineChart extends AbsLeafChart {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(line != null){
+        if(line != null && isShow){
             if(line.isCubic()) {
                 drawCubicPath(canvas);
             } else {
@@ -95,9 +99,10 @@ public class LeafLineChart extends AbsLeafChart {
                 //填充
                 drawFillArea(canvas);
             }
+
+            drawPoints(canvas);
         }
 
-        drawPoints(canvas);
         if (line != null && line.isHasLabels() && isAnimateEnd) {
             super.drawLabels(canvas, line);
         }
@@ -124,9 +129,9 @@ public class LeafLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
-//            pathLength = measure.getLength();
-
+            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
+
         }
     }
 
@@ -218,6 +223,7 @@ public class LeafLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
+            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
         }
     }
@@ -273,7 +279,6 @@ public class LeafLineChart extends AbsLeafChart {
 
     //showWithAnimation动画开启后会调用该方法
     public void setPhase(float phase) {
-        linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
         invalidate();
     }
 
@@ -291,6 +296,7 @@ public class LeafLineChart extends AbsLeafChart {
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, "phase", 0.0f, 1.0f);
         animator.setDuration(duration);
         animator.start();
+        isShow = true;
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -302,7 +308,6 @@ public class LeafLineChart extends AbsLeafChart {
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
             }
 
             @Override
