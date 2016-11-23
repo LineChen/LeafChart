@@ -34,7 +34,7 @@
 
 多线条支持
 
-![多线条支持](http://)
+![多线条支持](https://github.com/LineChen/LeafChart/blob/master/screenshot/multi_lines.png)
 
 ### 1.3 使用
 
