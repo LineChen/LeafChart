@@ -16,6 +16,7 @@ import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.support.Chart;
 import com.beiing.leafchart.support.LeafUtil;
+import com.beiing.leafchart.support.Mode;
 
 import java.util.List;
 
@@ -25,29 +26,6 @@ import java.util.List;
  * </br>
  */
 public abstract class AbsLeafChart extends View implements Chart{
-
-    private static class Mode{
-        /**
-         * 交叉，x、y轴都超出0点
-         */
-        public static final int ACROSS = 1;
-
-        /**
-         * 相交， x、y轴交于0点
-         */
-        public static final int INTERSECT = 2;
-
-        /**
-         * x轴超出0点
-         */
-        public static final int X_ACROSS = 3;
-
-        /**
-         * y轴超出0点
-         */
-        public static final int Y_ACROSS = 4;
-
-    }
 
     /**
      * 坐标轴原点处模式
@@ -242,7 +220,6 @@ public abstract class AbsLeafChart extends View implements Chart{
 
         drawCoordinateText(canvas);
 
-        setPointsLoc();
     }
 
     /**
@@ -368,20 +345,10 @@ public abstract class AbsLeafChart extends View implements Chart{
                     top = point.getOriginY() - 2.5f*textH;
                     bottom = point.getOriginY() - 0.5f*textH;
 
-//                    if(i > 0){
-//                        PointValue prePoint = values.get(i - 1);
-//                        RectF rectF = prePoint.getRectF();
-//                        if(left <= rectF.right){
-//                            // 左边与上一个标签重叠
-//                            top = point.getOriginY() + 1.7f*textH;
-//                            bottom = point.getOriginY() + 0.5f*textH;
-//                        }
-//                    }
-
                     //控制位置
-                    if(left < 0){
-                        left = leftPadding;
-                        right += leftPadding;
+                    if(left < axisY.getStartX()){
+                        left = axisY.getStartX();
+                        right += left;
                     }
                     if(top < 0){
                         top = topPadding;
@@ -409,8 +376,6 @@ public abstract class AbsLeafChart extends View implements Chart{
 
     protected abstract void resetPointWeight();
 
-    protected abstract void setPointsLoc();
-
     protected void resetPointWeight(ChartData chartData) {
         if(chartData != null && axisX != null && axisY != null){
             List<PointValue> values = chartData.getValues();
@@ -428,19 +393,10 @@ public abstract class AbsLeafChart extends View implements Chart{
 
                 float diffY = pointValue.getY() * totalHeight;
                 pointValue.setDiffY(diffY);
-            }
-        }
-    }
 
-    protected void setPointsLoc(ChartData chartData) {
-        if(chartData != null){
-            List<PointValue> values = chartData.getValues();
-            int size = values.size();
-            for (int i = 0; i < size; i++) {
-                PointValue point1 = values.get(i);
-                float originX1 = point1.getDiffX() + leftPadding + startMarginX;
-                float originY1 = mHeight - bottomPadding - point1.getDiffY() - startMarginY;
-                point1.setOriginX(originX1).setOriginY(originY1);
+                float originX1 = diffX + leftPadding + startMarginX;
+                float originY1 = mHeight - bottomPadding - diffY  - startMarginY;
+                pointValue.setOriginX(originX1).setOriginY(originY1);
             }
         }
     }

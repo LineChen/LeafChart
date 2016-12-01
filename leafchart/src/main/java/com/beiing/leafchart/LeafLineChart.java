@@ -5,11 +5,14 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 
 import com.beiing.leafchart.bean.Line;
@@ -43,6 +46,11 @@ public class LeafLineChart extends AbsLeafChart {
 
     private List<Line> lines;
 
+    private Paint fillPaint;
+
+    private LinearGradient fillShader;
+
+
     public LeafLineChart(Context context) {
         this(context, null, 0);
     }
@@ -53,6 +61,14 @@ public class LeafLineChart extends AbsLeafChart {
 
     public LeafLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void initPaint() {
+        super.initPaint();
+
+        fillPaint = new Paint();
+        fillPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -68,18 +84,6 @@ public class LeafLineChart extends AbsLeafChart {
         if (lines != null) {
             for (int i = 0, size = lines.size(); i < size; i++) {
                 super.resetPointWeight(lines.get(i));
-            }
-        }
-    }
-
-    /**
-     * 确定每个点所在位置
-     */
-    @Override
-    protected void setPointsLoc() {
-        if (lines != null) {
-            for (int i = 0, size = lines.size(); i < size; i++) {
-                super.setPointsLoc(lines.get(i));
             }
         }
     }
@@ -254,15 +258,19 @@ public class LeafLineChart extends AbsLeafChart {
             path.lineTo(firstX, axisX.getStartY());
             path.close();
 
-            linePaint.setStyle(Paint.Style.FILL);
+            if(fillShader == null){
+                fillShader = new LinearGradient(0, 0, 0, mHeight, line.getFillColr(), Color.TRANSPARENT, Shader.TileMode.CLAMP);
+                fillPaint.setShader(fillShader);
+            }
+
             if(line.getFillColr() == 0)
-                linePaint.setAlpha(100);
+                fillPaint.setAlpha(100);
             else
-                linePaint.setColor(line.getFillColr());
+                fillPaint.setColor(line.getFillColr());
 
             canvas.save(Canvas.CLIP_SAVE_FLAG);
-            canvas.clipRect(firstX, 0, phase * (lastX - firstX) + firstX, getMeasuredHeight());
-            canvas.drawPath(path, linePaint);
+            canvas.clipRect(firstX, 0, phase * (lastX - firstX) + firstX, mHeight);
+            canvas.drawPath(path, fillPaint);
             canvas.restore();
             path.reset();
         }

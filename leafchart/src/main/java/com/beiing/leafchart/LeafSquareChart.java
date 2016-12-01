@@ -76,11 +76,6 @@ public class LeafSquareChart extends AbsLeafChart {
         super.resetPointWeight(square);
     }
 
-    @Override
-    protected void setPointsLoc() {
-       super.setPointsLoc(square);
-    }
-
     public void setChartData(ChartData chartData) {
         this.square = (Square) chartData;
         resetPointWeight();
