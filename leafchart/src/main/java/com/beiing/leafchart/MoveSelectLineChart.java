@@ -26,12 +26,12 @@ import com.beiing.leafchart.support.OnPointSelectListener;
 import java.util.List;
 
 /**
- * Created by chenliu on 2016/7/15.<br/>
- * 描述：折线图
+ * Created by chenliu on 2016/12/13.<br/>
+ * 描述：滑动选择手指竖直方向最近的点
  * </br>
  */
-public class LeafLineChart extends AbsLeafChart {
 
+public class MoveSelectLineChart extends AbsLeafChart {
     private static final float LINE_SMOOTHNESS = 0.16f;
 
     private PathMeasure measure;
@@ -48,21 +48,31 @@ public class LeafLineChart extends AbsLeafChart {
 
     private float phase;
 
-    private List<Line> lines;
+    private Line line;
 
     private Paint fillPaint;
 
     private LinearGradient fillShader;
 
-    public LeafLineChart(Context context) {
+    private Paint movePaint;
+    private float moveX;
+    private float moveY;
+    private boolean isDrawMoveLine;
+    private OnPointSelectListener onPointSelectListener;
+
+    float downX;
+    float downY;
+    int scaledTouchSlop;
+
+    public MoveSelectLineChart(Context context) {
         this(context, null, 0);
     }
 
-    public LeafLineChart(Context context, AttributeSet attrs) {
+    public MoveSelectLineChart(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LeafLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MoveSelectLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -71,6 +81,11 @@ public class LeafLineChart extends AbsLeafChart {
         super.initPaint();
         fillPaint = new Paint();
         fillPaint.setStyle(Paint.Style.FILL);
+
+        movePaint = new Paint();
+        movePaint.setStyle(Paint.Style.STROKE);
+        movePaint.setStrokeWidth(LeafUtil.dp2px(mContext, 1));
+        scaledTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
     }
 
     @Override
@@ -83,43 +98,39 @@ public class LeafLineChart extends AbsLeafChart {
      */
     @Override
     protected void resetPointWeight() {
-        if (lines != null) {
-            for (int i = 0, size = lines.size(); i < size; i++) {
-                super.resetPointWeight(lines.get(i));
-            }
+        if (line != null) {
+            super.resetPointWeight(line);
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        if (lines != null && lines.size() > 0) {
-            Line line;
-            for (int i = 0, size = lines.size(); i < size; i++) {
-                line = lines.get(i);
-                if(line != null && isShow){
-                    if(line.isCubic()) {
-                        drawCubicPath(canvas, line);
-                    } else {
-                        drawLines(canvas, line);
-                    }
-                    if(line.isFill()){
-                        //填充
-                        drawFillArea(canvas, line);
-                    }
-
-                    drawPoints(canvas, line);
-                }
-
-                if (line != null && line.isHasLabels() && isAnimateEnd) {
-                    super.drawLabels(canvas, line);
-                }
+        if(line != null && isShow){
+            if(line.isCubic()) {
+                drawCubicPath(canvas, line);
+            } else {
+                drawLines(canvas, line);
             }
+            if(line.isFill()){
+                //填充
+                drawFillArea(canvas, line);
+            }
+            drawPoints(canvas, line);
         }
 
-    }
+        if (line != null && line.isHasLabels() && isAnimateEnd) {
+                    super.drawLabels(canvas, line);
+        }
 
+        if(line != null && line.isOpenMoveSelect()){
+            //绘制移动线条
+            if(isDrawMoveLine){
+                movePaint.setColor(line.getMoveLineColor());
+                canvas.drawLine(moveX, moveY, moveX, axisX.getStartY(), movePaint);
+            }
+        }
+    }
 
     /**
      * 画折线
@@ -141,7 +152,7 @@ public class LeafLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
-            linePaint.setPathEffect(createPathEffect(measure.getLength(), phase, 0.0f));
+            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
 
         }
@@ -236,7 +247,7 @@ public class LeafLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
-            linePaint.setPathEffect(createPathEffect(measure.getLength(), phase, 0.0f));
+            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
         }
     }
@@ -358,19 +369,77 @@ public class LeafLineChart extends AbsLeafChart {
         showWithAnimation(0);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                downX = event.getX();
+                downY = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if(downX - x != 0 && Math.abs(y - downY) < scaledTouchSlop){
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                isDrawMoveLine = false;
+                break;
+        }
+        countRoundPoint(x);
+        invalidate();
+        if (line != null) {
+            if(line.isOpenMoveSelect()){
+                return true;
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * 计算最接近的点
+     * @param x
+     */
+    private void countRoundPoint(float x){
+        if(line != null){
+            List<AxisValue> axisXValues = axisX.getValues();
+            int sizeX = axisXValues.size(); //几条y轴
+            float xStep = (mWidth - leftPadding - startMarginX) / sizeX;
+            int loc = Math.round((x - leftPadding - startMarginX) / xStep);
+            List<PointValue> values = line.getValues();
+            for (int i = 0, size = values.size(); i < size; i++) {
+                PointValue pointValue = values.get(i);
+                int ploc = (int) (pointValue.getDiffX() / xStep);
+                if(ploc == loc){
+                    moveX = pointValue.getOriginX();
+                    moveY = pointValue.getOriginY() + LeafUtil.dp2px(mContext, line.getPointRadius());
+                    isDrawMoveLine = true;
+                    if(onPointSelectListener != null){
+                        onPointSelectListener.onPointSelect(loc, axisXValues.get(loc).getLabel(), pointValue.getLabel());
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     private boolean isInArea(float x, float y, float touchX, float touchY, float radius) {
         float diffX = touchX - x;
         float diffY = touchY - y;
         return Math.pow(diffX, 2) + Math.pow(diffY, 2) <= 2 * Math.pow(radius, 2);
     }
 
-    public void setChartData(List<Line> chartDatas) {
-        lines = chartDatas;
+    public void setChartData(Line chartData) {
+        line = chartData;
         resetPointWeight();
     }
 
-    public List<Line> getChartData() {
-        return lines;
+    public Line getChartData() {
+        return line;
     }
 
+    public void setOnPointSelectListener(OnPointSelectListener onPointSelectListener) {
+        this.onPointSelectListener = onPointSelectListener;
+    }
 }

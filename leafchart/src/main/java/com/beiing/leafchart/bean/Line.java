@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Line extends ChartData {
     private int lineColor = Color.GRAY; //折线颜色
-    private int lineWidth = 1; // 折线的宽度dp
+    private float lineWidth = 1; // 折线的宽度dp
     private boolean hasPoints = true; //是否画圆点
 
     private boolean hasLines = true; // 是否画线条
@@ -28,6 +28,10 @@ public class Line extends ChartData {
     private int fillColr = 0; // 填充色
 
     private Path path = new Path();//折线路径
+
+    private boolean isOpenMoveSelect;//是否开启滑动选值
+
+    private int moveLineColor;//移动线条颜色
 
     public Line(List<PointValue> values) {
         this.values = values;
@@ -95,7 +99,7 @@ public class Line extends ChartData {
         return lineWidth;
     }
 
-    public Line setLineWidth(int lineWidth) {
+    public Line setLineWidth(float lineWidth) {
         this.lineWidth = lineWidth;
         return this;
     }
@@ -124,6 +128,24 @@ public class Line extends ChartData {
 
     public Line setHasLines(boolean hasLines) {
         this.hasLines = hasLines;
+        return this;
+    }
+
+    public boolean isOpenMoveSelect() {
+        return isOpenMoveSelect;
+    }
+
+    public Line setOpenMoveSelect(boolean openMoveSelect) {
+        isOpenMoveSelect = openMoveSelect;
+        return this;
+    }
+
+    public int getMoveLineColor() {
+        return moveLineColor;
+    }
+
+    public Line setMoveLineColor(int moveLineColor) {
+        this.moveLineColor = moveLineColor;
         return this;
     }
 

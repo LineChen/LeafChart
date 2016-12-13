@@ -52,7 +52,7 @@ public abstract class AbsLeafChart extends View implements Chart{
     /**
      * 坐标轴
      */
-    protected Paint paint;
+    private Paint paint;
     /**
      * 折线图、直方图
      */
@@ -82,6 +82,10 @@ public abstract class AbsLeafChart extends View implements Chart{
     private void initAttrs(AttributeSet attrs) {
         if (attrs != null) {
             TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
+            topPadding = ta.getDimension(R.styleable.AbsLeafChart_topPadding, LeafUtil.dp2px(mContext, 10));
+            leftPadding = ta.getDimension(R.styleable.AbsLeafChart_leftPadding, LeafUtil.dp2px(mContext, 20));
+            rightPadding = ta.getDimension(R.styleable.AbsLeafChart_rightPadding, LeafUtil.dp2px(mContext, 10));
+            bottomPadding = ta.getDimension(R.styleable.AbsLeafChart_bottomPadding, LeafUtil.dp2px(mContext, 20));
             startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
             startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginY, 0);
             coordinateMode = ta.getInteger(R.styleable.AbsLeafChart_coordinateMode, Mode.INTERSECT);
@@ -135,10 +139,6 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected void initViewSize() {
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
-        leftPadding = LeafUtil.dp2px(mContext, 20);
-        rightPadding = LeafUtil.dp2px(mContext, 10);
-        topPadding = LeafUtil.dp2px(mContext, 15);
-        bottomPadding = LeafUtil.dp2px(mContext, 20);
     }
 
     /**
@@ -288,8 +288,10 @@ public abstract class AbsLeafChart extends View implements Chart{
             if(axisX.isShowText()){
                 for (int i = 0; i < valuesX.size(); i++) {
                     AxisValue value = valuesX.get(i);
-                    float textW = paint.measureText(value.getLabel());
-                    canvas.drawText(value.getLabel(), value.getPointX() - textW / 2,  value.getPointY() - textH / 2,paint);
+                    if(value.isShowLabel()){
+                        float textW = paint.measureText(value.getLabel());
+                        canvas.drawText(value.getLabel(), value.getPointX() - textW / 2,  value.getPointY() - textH / 2,paint);
+                    }
                 }
             }
 
@@ -318,8 +320,6 @@ public abstract class AbsLeafChart extends View implements Chart{
         if (chartData != null) {
             if(chartData.isHasLabels()){
                 labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
-
-                Paint.FontMetrics fontMetrics = labelPaint.getFontMetrics();
                 List<PointValue> values = chartData.getValues();
                 int size = values.size();
                 for (int i = 0; i < size; i++) {
@@ -362,6 +362,7 @@ public abstract class AbsLeafChart extends View implements Chart{
                     RectF rectF = new RectF(left, top, right, bottom);
                     float labelRadius = LeafUtil.dp2px(mContext,chartData.getLabelRadius());
                     labelPaint.setColor(chartData.getLabelColor());
+                    labelPaint.setStyle(Paint.Style.FILL);
                     canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
 
                     //drawText

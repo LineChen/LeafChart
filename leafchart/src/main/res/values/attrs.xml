@@ -2,6 +2,12 @@
 <resources>
 
     <declare-styleable name="AbsLeafChart">
+
+        <attr name="topPadding" format="dimension"/>
+        <attr name="leftPadding" format="dimension"/>
+        <attr name="bottomPadding" format="dimension"/>
+        <attr name="rightPadding" format="dimension"/>
+
         <attr name="startMarginX" format="dimension"/>
         
         <attr name="startMarginY" format="dimension"/>

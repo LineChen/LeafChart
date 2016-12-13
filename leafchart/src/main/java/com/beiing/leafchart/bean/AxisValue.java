@@ -15,6 +15,9 @@ public class AxisValue {
     /**y坐标**/
     private float pointY;
 
+    /**是否显示刻度值**/
+    private boolean isShowLabel = true;
+
     public AxisValue(){
 
     }
@@ -45,6 +48,14 @@ public class AxisValue {
 
     public void setPointY(float pointY) {
         this.pointY = pointY;
+    }
+
+    public boolean isShowLabel() {
+        return isShowLabel;
+    }
+
+    public void setShowLabel(boolean showLabel) {
+        isShowLabel = showLabel;
     }
 
     @Override

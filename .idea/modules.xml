@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/LeafChart.iml" filepath="$PROJECT_DIR$/LeafChart.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/leafchart/leafchart.iml" filepath="$PROJECT_DIR$/leafchart/leafchart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/leafchart-v2/leafchart-v2.iml" filepath="$PROJECT_DIR$/leafchart-v2/leafchart-v2.iml" />
     </modules>
   </component>
 </project>

@@ -26,22 +26,38 @@
         android:onClick="toChartInFragment"
         android:textAllCaps="false"/>
 
-    <com.beiing.leafchart.LeafLineChart
-        android:id="@+id/leaf_chart"
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:visibility="visible"
-        />
+        android:layout_height="wrap_content"
+        android:text="MoveSelectLineChart"
+        android:onClick="MoveSelectLineChart"
+        android:textAllCaps="false"/>
 
-
-    <com.beiing.leafchart.LeafSquareChart
-        android:id="@+id/leaf_square_chart"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="#ffffff"
-        app:startMarginX="20dp"
-        app:coordinateMode="intersect"
-        android:visibility="gone"
-        />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.beiing.leafchart.LeafLineChart
+                android:id="@+id/leaf_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="visible"
+                />
+
+            <com.beiing.leafchart.LeafSquareChart
+                android:id="@+id/leaf_square_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="#ffffff"
+                app:startMarginX="20dp"
+                app:coordinateMode="intersect"
+                />
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

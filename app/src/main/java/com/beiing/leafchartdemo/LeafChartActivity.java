@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.beiing.leafchart.LeafLineChart;
@@ -13,6 +14,7 @@ import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.Square;
+import com.beiing.leafchart.support.OnPointSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class LeafChartActivity extends AppCompatActivity {
         lines.add(getFoldLine());
         leafLineChart.setChartData(lines);
 
-        leafLineChart.showWithAnimation(3000);
+        leafLineChart.showWithAnimation(1000);
 
 //        leafLineChart.show();
     }
@@ -105,6 +107,8 @@ public class LeafChartActivity extends AppCompatActivity {
                 .setPointRadius(3)
                 .setFill(true)
                 .setFillColr(Color.parseColor("#33B5E5"))
+                .setOpenMoveSelect(true)
+                .setMoveLineColor(Color.GREEN)
                 .setHasLabels(true)
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
@@ -132,5 +136,9 @@ public class LeafChartActivity extends AppCompatActivity {
 
     public void toChartInFragment(View view) {
         startActivity(new Intent(this, ChartInFragmentActivity.class));
+    }
+
+    public void MoveSelectLineChart(View view) {
+        startActivity(new Intent(this, MoveSelectLineChartActivity.class));
     }
 }

@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChartInFragmentActivity"></activity>
+        <activity android:name=".ChartInFragmentActivity" />
+        <activity android:name=".MoveSelectLineChartActivity"></activity>
     </application>
 
 </manifest>
