@@ -27,14 +27,17 @@
         android:gravity="center"
         android:padding="10dp"
         android:textColor="@color/colorAccent"
+        android:textSize="18sp"
         />
 
     <com.beiing.leafchart.MoveSelectLineChart
         android:id="@+id/move_select_chart"
         android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="300dp"
         app:coordinateMode="x_across"
-        app:leftPadding="20dp"
+        app:leftPadding="30dp"
         app:topPadding="0dp"
         app:bottomPadding="4dp"
         app:startMarginY="8dp"

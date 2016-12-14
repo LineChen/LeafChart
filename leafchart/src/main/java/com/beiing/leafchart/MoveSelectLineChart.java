@@ -14,6 +14,7 @@ import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
@@ -126,10 +127,15 @@ public class MoveSelectLineChart extends AbsLeafChart {
         if(line != null && line.isOpenMoveSelect()){
             //绘制移动线条
             if(isDrawMoveLine){
-                movePaint.setColor(line.getMoveLineColor());
-                canvas.drawLine(moveX, moveY, moveX, axisX.getStartY(), movePaint);
+                draeMoveLine(canvas);
             }
         }
+    }
+
+
+    private void draeMoveLine(Canvas canvas) {
+        movePaint.setColor(line.getMoveLineColor());
+        canvas.drawLine(moveX, moveY, moveX, axisX.getStartY(), movePaint);
     }
 
     /**
@@ -152,7 +158,7 @@ public class MoveSelectLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
-            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
+            linePaint.setPathEffect(createPathEffect(measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
 
         }
@@ -247,7 +253,7 @@ public class MoveSelectLineChart extends AbsLeafChart {
             }
 
             measure = new PathMeasure(path, false);
-            linePaint.setPathEffect(createPathEffect(measure == null ? 0 : measure.getLength(), phase, 0.0f));
+            linePaint.setPathEffect(createPathEffect(measure.getLength(), phase, 0.0f));
             canvas.drawPath(path, linePaint);
         }
     }
@@ -410,7 +416,7 @@ public class MoveSelectLineChart extends AbsLeafChart {
             List<PointValue> values = line.getValues();
             for (int i = 0, size = values.size(); i < size; i++) {
                 PointValue pointValue = values.get(i);
-                int ploc = (int) (pointValue.getDiffX() / xStep);
+                int ploc = Math.round(pointValue.getDiffX() / xStep);
                 if(ploc == loc){
                     moveX = pointValue.getOriginX();
                     moveY = pointValue.getOriginY() + LeafUtil.dp2px(mContext, line.getPointRadius());

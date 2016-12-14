@@ -13,7 +13,7 @@
 -  `Axis.setTextSize`	坐标轴刻度字体大小
 -  `Axis.setTextColor`	坐标轴刻度字体颜色
 
->折线
+>折线@LeafLineChart
 
 -  `Line.setLineWidth`	折线宽度
 -  `Line.setLineColor`	折线颜色
@@ -26,15 +26,26 @@
 -  `Line.setFillColr`	填充颜色(默认为有透明度的折线颜色)
 
 
+>MoveSelectLineChart
+新增：
+
+- `Line.setOpenMoveSelect` 是否开启滑动选值
+- `Line.setMoveLineColor` 	移动标尺线的颜色
+
 
 ### 1.2 效果图
 ![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line1.gif)
 
 ![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line2.gif)
 
-多线条支持
+- 多线条支持
 
 ![多线条支持](https://github.com/LineChen/LeafChart/blob/master/screenshot/multi_lines.png)
+
+- 移动选值
+
+![移动选值](https://github.com/LineChen/LeafChart/blob/master/screenshot/move_select.gif)
+
 
 ### 1.3 使用
 
