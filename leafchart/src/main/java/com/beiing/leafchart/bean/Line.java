@@ -29,10 +29,6 @@ public class Line extends ChartData {
 
     private Path path = new Path();//折线路径
 
-    private boolean isOpenMoveSelect;//是否开启滑动选值
-
-    private int moveLineColor;//移动线条颜色
-
     public Line(List<PointValue> values) {
         this.values = values;
     }
@@ -130,25 +126,6 @@ public class Line extends ChartData {
         this.hasLines = hasLines;
         return this;
     }
-
-    public boolean isOpenMoveSelect() {
-        return isOpenMoveSelect;
-    }
-
-    public Line setOpenMoveSelect(boolean openMoveSelect) {
-        isOpenMoveSelect = openMoveSelect;
-        return this;
-    }
-
-    public int getMoveLineColor() {
-        return moveLineColor;
-    }
-
-    public Line setMoveLineColor(int moveLineColor) {
-        this.moveLineColor = moveLineColor;
-        return this;
-    }
-
     public Path getPath() {
         return path;
     }

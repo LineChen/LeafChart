@@ -107,8 +107,6 @@ public class LeafChartActivity extends AppCompatActivity {
                 .setPointRadius(3)
                 .setFill(true)
                 .setFillColr(Color.parseColor("#33B5E5"))
-                .setOpenMoveSelect(true)
-                .setMoveLineColor(Color.GREEN)
                 .setHasLabels(true)
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;

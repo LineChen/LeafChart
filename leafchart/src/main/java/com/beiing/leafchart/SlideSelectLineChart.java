@@ -14,13 +14,13 @@ import android.graphics.PathEffect;
 import android.graphics.PathMeasure;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
 import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
+import com.beiing.leafchart.bean.SlidingLine;
 import com.beiing.leafchart.support.LeafUtil;
 import com.beiing.leafchart.support.OnPointSelectListener;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * </br>
  */
 
-public class MoveSelectLineChart extends AbsLeafChart {
+public class SlideSelectLineChart extends AbsLeafChart {
     private static final float LINE_SMOOTHNESS = 0.16f;
 
     private PathMeasure measure;
@@ -50,12 +50,12 @@ public class MoveSelectLineChart extends AbsLeafChart {
     private float phase;
 
     private Line line;
+    private SlidingLine slidingLine;
 
     private Paint fillPaint;
-
     private LinearGradient fillShader;
 
-    private Paint movePaint;
+    private Paint slidePaint;
     private float moveX;
     private float moveY;
     private boolean isDrawMoveLine;
@@ -65,16 +65,23 @@ public class MoveSelectLineChart extends AbsLeafChart {
     float downY;
     int scaledTouchSlop;
 
-    public MoveSelectLineChart(Context context) {
+    public SlideSelectLineChart(Context context) {
         this(context, null, 0);
     }
 
-    public MoveSelectLineChart(Context context, AttributeSet attrs) {
+    public SlideSelectLineChart(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MoveSelectLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SlideSelectLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        initDefaultSlidingLine();
+    }
+
+    private void initDefaultSlidingLine() {
+        slidingLine = new SlidingLine();
+        slidingLine.setDash(true).setSlideLineWidth(1).setSlidePointRadius(3);
     }
 
     @Override
@@ -83,9 +90,7 @@ public class MoveSelectLineChart extends AbsLeafChart {
         fillPaint = new Paint();
         fillPaint.setStyle(Paint.Style.FILL);
 
-        movePaint = new Paint();
-        movePaint.setStyle(Paint.Style.STROKE);
-        movePaint.setStrokeWidth(LeafUtil.dp2px(mContext, 1));
+        slidePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         scaledTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
     }
 
@@ -124,18 +129,30 @@ public class MoveSelectLineChart extends AbsLeafChart {
                     super.drawLabels(canvas, line);
         }
 
-        if(line != null && line.isOpenMoveSelect()){
+        if(slidingLine != null && slidingLine.isOpenSlideSelect()){
             //绘制移动线条
             if(isDrawMoveLine){
-                draeMoveLine(canvas);
+                drawSlideLine(canvas);
             }
         }
     }
 
+    /**
+     * 竖直滑动标尺线
+     * @param canvas
+     */
+    private void drawSlideLine(Canvas canvas) {
+        slidePaint.setStrokeWidth(LeafUtil.dp2px(mContext, 1));
+        slidePaint.setColor(slidingLine.getSlideLineColor());
+        canvas.drawLine(moveX, moveY, moveX, axisX.getStartY(), slidePaint);
 
-    private void draeMoveLine(Canvas canvas) {
-        movePaint.setColor(line.getMoveLineColor());
-        canvas.drawLine(moveX, moveY, moveX, axisX.getStartY(), movePaint);
+        slidePaint.setStyle(Paint.Style.FILL);
+        slidePaint.setColor(Color.WHITE);
+        float slidePointRadius = slidingLine.getSlidePointRadius();
+        canvas.drawCircle(moveX, moveY, LeafUtil.dp2px(mContext, slidePointRadius) , slidePaint);
+        slidePaint.setStyle(Paint.Style.FILL);
+        slidePaint.setColor(Color.WHITE);
+        canvas.drawCircle(moveX, moveY, LeafUtil.dp2px(mContext, 2) , slidePaint);
     }
 
     /**
@@ -395,8 +412,9 @@ public class MoveSelectLineChart extends AbsLeafChart {
         }
         countRoundPoint(x);
         invalidate();
-        if (line != null) {
-            if(line.isOpenMoveSelect()){
+
+        if (slidingLine != null) {
+            if(slidingLine.isOpenSlideSelect()){
                 return true;
             }
         }
@@ -439,6 +457,10 @@ public class MoveSelectLineChart extends AbsLeafChart {
     public void setChartData(Line chartData) {
         line = chartData;
         resetPointWeight();
+    }
+
+    public void setSlideLine(SlidingLine slideLine){
+        this.slidingLine = slideLine;
     }
 
     public Line getChartData() {

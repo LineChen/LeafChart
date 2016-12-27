@@ -30,7 +30,7 @@
         android:textSize="18sp"
         />
 
-    <com.beiing.leafchart.MoveSelectLineChart
+    <com.beiing.leafchart.SlideSelectLineChart
         android:id="@+id/move_select_chart"
         android:layout_width="match_parent"
         android:layout_marginLeft="10dp"

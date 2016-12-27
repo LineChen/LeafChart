@@ -5,11 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.beiing.leafchart.MoveSelectLineChart;
+import com.beiing.leafchart.SlideSelectLineChart;
 import com.beiing.leafchart.bean.Axis;
 import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
+import com.beiing.leafchart.bean.SlidingLine;
 import com.beiing.leafchart.support.OnPointSelectListener;
 
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ import java.util.List;
 
 public class MoveSelectLineChartActivity extends AppCompatActivity {
 
-    MoveSelectLineChart moveSelectLineChart;
+    SlideSelectLineChart moveSelectLineChart;
     TextView tvSelectPoint;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_select_line_chart);
-        moveSelectLineChart = (MoveSelectLineChart) findViewById(R.id.move_select_chart);
+        moveSelectLineChart = (SlideSelectLineChart) findViewById(R.id.move_select_chart);
         tvSelectPoint = (TextView) findViewById(R.id.tv_select_point);
 
         initLineChart();
@@ -45,14 +46,17 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
         moveSelectLineChart.setAxisX(axisX);
         moveSelectLineChart.setAxisY(axisY);
 
+        moveSelectLineChart.setSlideLine(getSlideingLine());
         moveSelectLineChart.setChartData(getFoldLine());
         moveSelectLineChart.show();
     }
 
 
+    int days = 90;
+
     private List<AxisValue> getAxisValuesX(){
         List<AxisValue> axisValues = new ArrayList<>();
-        for (int i = 1; i <= 31; i++) {
+        for (int i = 1; i <= days; i++) {
             AxisValue value = new AxisValue();
             value.setLabel(i + "日");
             axisValues.add(value);
@@ -72,10 +76,10 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
 
     private Line getFoldLine(){
         List<PointValue> pointValues = new ArrayList<>();
-        for (int i = 1; i <= 31; i++) {
+        for (int i = 1; i <= days; i++) {
             PointValue pointValue = new PointValue();
-            pointValue.setX( (i - 1) / (31f - 1f));
-            int var = (int) (Math.random() * 100);
+            pointValue.setX( (i - 1) / (days - 1f));
+            int var = 5 + i + (int) (Math.random() * 10);
             pointValue.setLabel(String.valueOf(var));
             pointValue.setY(var / 100f);
             pointValues.add(pointValue);
@@ -88,10 +92,17 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
                 .setCubic(true)
                 .setPointRadius(2)
                 .setFill(true)
+                .setHasPoints(false)
                 .setFillColr(Color.parseColor("#33B5E5"))
-                .setOpenMoveSelect(true)
-                .setMoveLineColor(Color.MAGENTA)
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
+    }
+
+    private SlidingLine getSlideingLine(){
+        SlidingLine slidingLine = new SlidingLine();
+        slidingLine.setSlideLineColor(Color.YELLOW)
+                .setSlidePointColor(Color.parseColor("#33B5E5"))
+                .setSlidePointRadius(4);
+        return slidingLine;
     }
 }
