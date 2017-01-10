@@ -164,10 +164,10 @@ private List<AxisValue> getAxisValuesY(){
 
 
 初始化Y轴数据：
-（同1.3）
+（同上）
 
 初始化点数据和相关设置：
-（同1.3）
+（同上）
 
 初始化标尺线：
 
