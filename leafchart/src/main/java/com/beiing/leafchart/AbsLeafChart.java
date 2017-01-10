@@ -14,6 +14,7 @@ import com.beiing.leafchart.bean.Axis;
 import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.PointValue;
+import com.beiing.leafchart.renderer.AbsRenderer;
 import com.beiing.leafchart.support.Chart;
 import com.beiing.leafchart.support.LeafUtil;
 import com.beiing.leafchart.support.Mode;
@@ -49,18 +50,8 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected float leftPadding, topPadding, rightPadding, bottomPadding;//控件内部间隔
 
     protected Context mContext;
-    /**
-     * 坐标轴
-     */
-    private Paint paint;
-    /**
-     * 折线图、直方图
-     */
-    protected Paint linePaint;
-    /**
-     * 标签
-     */
-    protected Paint labelPaint;
+
+    private AbsRenderer absRenderer;
 
     public AbsLeafChart(Context context) {
         this(context, null, 0);
@@ -74,14 +65,16 @@ public abstract class AbsLeafChart extends View implements Chart{
         super(context, attrs, defStyleAttr);
         mContext = context;
 
-        initAttrs(attrs);
+        initRenderer();
 
-        initPaint();
+        setRenderer();
+
+        initAttrs(attrs);
     }
 
     private void initAttrs(AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
+        TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
+        try{
             topPadding = ta.getDimension(R.styleable.AbsLeafChart_topPadding, LeafUtil.dp2px(mContext, 10));
             leftPadding = ta.getDimension(R.styleable.AbsLeafChart_leftPadding, LeafUtil.dp2px(mContext, 20));
             rightPadding = ta.getDimension(R.styleable.AbsLeafChart_rightPadding, LeafUtil.dp2px(mContext, 10));
@@ -89,17 +82,21 @@ public abstract class AbsLeafChart extends View implements Chart{
             startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
             startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginY, 0);
             coordinateMode = ta.getInteger(R.styleable.AbsLeafChart_coordinateMode, Mode.INTERSECT);
+        } finally {
             ta.recycle();
         }
     }
 
-
-    protected void initPaint() {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        linePaint.setStrokeCap(Paint.Cap.ROUND);
-        labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    public void setRenderer(AbsRenderer renderer){
+        this.absRenderer = renderer;
     }
+
+    ///////////////////子类必须重写的方法////////////////////////////
+    protected abstract void initRenderer();
+
+    protected abstract void setRenderer();
+
+    protected abstract void resetPointWeight();
 
     /**
      * 不重写改方法，在布局中使用 wrap_content 显示效果是 match_parent
@@ -139,6 +136,8 @@ public abstract class AbsLeafChart extends View implements Chart{
     protected void initViewSize() {
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
+        absRenderer.setWH(mWidth, mHeight);
+        absRenderer.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
     }
 
     /**
@@ -211,171 +210,12 @@ public abstract class AbsLeafChart extends View implements Chart{
         }
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        drawCoordinateLines(canvas);
-
-        drawCoordinateText(canvas);
-
+        absRenderer.drawCoordinateLines(canvas, axisX, axisY);
+        absRenderer.drawCoordinateText(canvas, axisX, axisY);
     }
-
-    /**
-     * 坐标轴
-     * @param canvas
-     */
-    protected void drawCoordinateLines(Canvas canvas) {
-        if(axisX != null && axisY != null){
-            // 平行于y 轴的坐标轴
-            if(axisY.isHasLines()){
-                paint.setColor(axisY.getAxisLineColor());
-                paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisLineWidth()));
-                List<AxisValue> valuesX = axisX.getValues();
-                int sizeX = valuesX.size();
-                for (int i = 0; i < sizeX; i++) {
-                    AxisValue value = valuesX.get(i);
-                    canvas.drawLine(value.getPointX(),
-                            axisY.getStartY() - LeafUtil.dp2px(mContext, axisY.getAxisWidth()),
-                            value.getPointX(), axisY.getStopY(), paint);
-                }
-            }
-
-            // 平行于x轴的坐标轴
-            if(axisX.isHasLines()){
-                paint.setColor(axisX.getAxisLineColor());
-                paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisX.getAxisLineWidth()));
-                List<AxisValue> valuesY = axisY.getValues();
-                int sizeY = valuesY.size();
-                for (int i = 0; i < sizeY; i++) {
-                    AxisValue value = valuesY.get(i);
-                    canvas.drawLine(axisY.getStartX() + LeafUtil.dp2px(mContext, axisX.getAxisWidth()),
-                            value.getPointY(),
-                            axisX.getStopX(),
-                            value.getPointY() , paint);
-                }
-            }
-
-            //X坐标轴
-            paint.setColor(axisX.getAxisColor());
-            paint.setStrokeWidth(LeafUtil.dp2px(mContext,axisX.getAxisWidth()));
-            canvas.drawLine(axisX.getStartX(), axisX.getStartY(), axisX.getStopX(), axisX.getStopY(), paint);
-
-            //Y坐标轴
-            paint.setColor(axisY.getAxisColor());
-            paint.setStrokeWidth(LeafUtil.dp2px(mContext, axisY.getAxisWidth()));
-            canvas.drawLine(axisY.getStartX(),
-                    axisY.getStartY(), axisY.getStopX(), axisY.getStopY(), paint);
-        }
-    }
-
-    /**
-     * 画坐标轴 刻度值
-     * @param canvas
-     */
-    protected void drawCoordinateText(Canvas canvas) {
-        if(axisX != null && axisY != null){
-            //////// X 轴
-            // 1.刻度
-            paint.setColor(axisX.getTextColor());
-            paint.setTextSize(LeafUtil.sp2px(mContext, axisX.getTextSize()));
-
-            Paint.FontMetrics fontMetrics = paint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
-            float textH = fontMetrics.descent - fontMetrics.ascent;
-
-            List<AxisValue> valuesX = axisX.getValues();
-            if(axisX.isShowText()){
-                for (int i = 0; i < valuesX.size(); i++) {
-                    AxisValue value = valuesX.get(i);
-                    if(value.isShowLabel()){
-                        float textW = paint.measureText(value.getLabel());
-                        canvas.drawText(value.getLabel(), value.getPointX() - textW / 2,  value.getPointY() - textH / 2,paint);
-                    }
-                }
-            }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            /////// Y 轴
-            paint.setColor(axisY.getTextColor());
-            paint.setTextSize(LeafUtil.sp2px(mContext, axisY.getTextSize()));
-
-            List<AxisValue> valuesY = axisY.getValues();
-            if(axisY.isShowText()){
-                for (AxisValue value : valuesY){
-                    float textW = paint.measureText(value.getLabel());
-                    float pointx = value.getPointX() - 1.1f * textW;
-                    canvas.drawText(value.getLabel(), pointx , value.getPointY(),paint);
-                }
-            }
-        }
-    }
-
-    /**
-     * 画标签
-     * @param canvas
-     * @param chartData
-     */
-    protected void drawLabels(Canvas canvas, ChartData chartData) {
-        if (chartData != null) {
-            if(chartData.isHasLabels()){
-                labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
-                List<PointValue> values = chartData.getValues();
-                int size = values.size();
-                for (int i = 0; i < size; i++) {
-                    PointValue point = values.get(i);
-                    String label = point.getLabel();
-                    Rect bounds = new Rect();
-                    int length = label.length();
-                    labelPaint.getTextBounds(label, 0, length, bounds);
-
-                    float textW = bounds.width();
-                    float textH = bounds.height();
-                    float left, top, right, bottom;
-                    if(length == 1){
-                        left = point.getOriginX() - textW * 2.2f;
-                        right = point.getOriginX() + textW * 2.2f;
-                    }  else if(length == 2){
-                        left = point.getOriginX() - textW * 1.0f;
-                        right = point.getOriginX() + textW * 1.0f;
-                    } else {
-                        left = point.getOriginX() - textW * 0.6f;
-                        right = point.getOriginX() + textW * 0.6f;
-                    }
-                    top = point.getOriginY() - 2.5f*textH;
-                    bottom = point.getOriginY() - 0.5f*textH;
-
-                    //控制位置
-                    if(left < axisY.getStartX()){
-                        left = axisY.getStartX();
-                        right += left;
-                    }
-                    if(top < 0){
-                        top = topPadding;
-                        bottom += topPadding;
-                    }
-                    if(right > mWidth){
-                        right -= rightPadding;
-                        left -= rightPadding;
-                    }
-
-                    RectF rectF = new RectF(left, top, right, bottom);
-                    float labelRadius = LeafUtil.dp2px(mContext,chartData.getLabelRadius());
-                    labelPaint.setColor(chartData.getLabelColor());
-                    labelPaint.setStyle(Paint.Style.FILL);
-                    canvas.drawRoundRect(rectF, labelRadius, labelRadius, labelPaint);
-
-                    //drawText
-                    labelPaint.setColor(Color.WHITE);
-                    float xCoordinate = left + (right - left - textW) / 2;
-                    float yCoordinate = bottom - (bottom - top - textH) / 2 ;
-                    canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
-                }
-            }
-        }
-    }
-
-    protected abstract void resetPointWeight();
 
     protected void resetPointWeight(ChartData chartData) {
         if(chartData != null && axisX != null && axisY != null){

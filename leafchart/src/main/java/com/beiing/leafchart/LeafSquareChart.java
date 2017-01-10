@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.Square;
+import com.beiing.leafchart.renderer.LeafSquareRenderer;
 import com.beiing.leafchart.support.LeafUtil;
 
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.List;
 public class LeafSquareChart extends AbsLeafChart {
 
     private Square square;
+
+    LeafSquareRenderer leafSquareRenderer;
 
     public LeafSquareChart(Context context) {
         this(context, null, 0);
@@ -37,6 +40,16 @@ public class LeafSquareChart extends AbsLeafChart {
     }
 
     @Override
+    protected void initRenderer() {
+        leafSquareRenderer = new LeafSquareRenderer(mContext, this);
+    }
+
+    @Override
+    protected void setRenderer() {
+        super.setRenderer(leafSquareRenderer);
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -45,29 +58,10 @@ public class LeafSquareChart extends AbsLeafChart {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        drawSquares(canvas);
+        leafSquareRenderer.drawSquares(canvas, square, axisX);
 
         if (square != null && square.isHasLabels()) {
-            super.drawLabels(canvas, square);
-        }
-    }
-
-    private void drawSquares(Canvas canvas) {
-        if (square != null) {
-            //1.画直方图边界
-            linePaint.setColor(square.getBorderColor());
-            if(!square.isFill()){
-                linePaint.setStrokeWidth(LeafUtil.dp2px(getContext(), square.getBorderWidth()));
-                linePaint.setStyle(Paint.Style.STROKE);
-            }
-            List<PointValue> values = square.getValues();
-            float width = LeafUtil.dp2px(getContext(), square.getWidth());
-            for (PointValue point : values) {
-                RectF rectF = new RectF(point.getOriginX() - width / 2,
-                        point.getOriginY(), point.getOriginX() + width / 2, axisX.getStartY());
-
-                canvas.drawRect(rectF, linePaint);
-            }
+            leafSquareRenderer.drawLabels(canvas, square, axisY);
         }
     }
 

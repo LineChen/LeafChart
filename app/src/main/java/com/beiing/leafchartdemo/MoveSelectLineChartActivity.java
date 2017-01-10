@@ -100,9 +100,9 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
 
     private SlidingLine getSlideingLine(){
         SlidingLine slidingLine = new SlidingLine();
-        slidingLine.setSlideLineColor(Color.YELLOW)
+        slidingLine.setSlideLineColor(Color.DKGRAY)
                 .setSlidePointColor(Color.parseColor("#33B5E5"))
-                .setSlidePointRadius(4);
+                .setSlidePointRadius(3);
         return slidingLine;
     }
 }

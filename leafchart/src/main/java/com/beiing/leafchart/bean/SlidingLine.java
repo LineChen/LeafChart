@@ -14,7 +14,7 @@ public class SlidingLine {
     private boolean isOpenSlideSelect = true;
 
     /**是否是虚线**/
-    private boolean isDash;
+    private boolean isDash = true;
 
     /**移动标尺线颜色**/
     private int slideLineColor = Color.YELLOW;
@@ -23,7 +23,7 @@ public class SlidingLine {
     private float slideLineWidth = 1;
 
     /**移动点半径**/
-    private float slidePointRadius = 5;
+    private float slidePointRadius = 3;
 
     /**移动标尺线顶端圆点颜色**/
     private int slidePointColor = Color.YELLOW;
