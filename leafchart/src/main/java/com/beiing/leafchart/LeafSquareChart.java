@@ -2,17 +2,13 @@ package com.beiing.leafchart;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import com.beiing.leafchart.bean.ChartData;
-import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.Square;
 import com.beiing.leafchart.renderer.LeafSquareRenderer;
 import com.beiing.leafchart.support.LeafUtil;
 
-import java.util.List;
 
 /**
  * Created by chenliu on 2016/9/10.<br/>

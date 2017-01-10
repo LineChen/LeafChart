@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    tools:context="com.beiing.leafchartdemo.MoveSelectLineChartActivity"
+    tools:context="com.beiing.leafchartdemo.SlideSelectLineChartActivity"
     android:background="#ffffff">
 
     <android.support.v7.widget.Toolbar
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         />
 

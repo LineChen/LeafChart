@@ -16,20 +16,20 @@ import com.beiing.leafchart.support.OnPointSelectListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoveSelectLineChartActivity extends AppCompatActivity {
+public class SlideSelectLineChartActivity extends AppCompatActivity {
 
-    SlideSelectLineChart moveSelectLineChart;
+    SlideSelectLineChart slideSelectLineChart;
     TextView tvSelectPoint;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_select_line_chart);
-        moveSelectLineChart = (SlideSelectLineChart) findViewById(R.id.move_select_chart);
+        slideSelectLineChart = (SlideSelectLineChart) findViewById(R.id.move_select_chart);
         tvSelectPoint = (TextView) findViewById(R.id.tv_select_point);
 
         initLineChart();
 
-        moveSelectLineChart.setOnPointSelectListener(new OnPointSelectListener() {
+        slideSelectLineChart.setOnPointSelectListener(new OnPointSelectListener() {
             @Override
             public void onPointSelect(int position, String xLabel, String value) {
                 String point = xLabel + ":" + value;
@@ -43,12 +43,12 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
         axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(false);
         Axis axisY = new Axis(getAxisValuesY());
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
-        moveSelectLineChart.setAxisX(axisX);
-        moveSelectLineChart.setAxisY(axisY);
+        slideSelectLineChart.setAxisX(axisX);
+        slideSelectLineChart.setAxisY(axisY);
 
-        moveSelectLineChart.setSlideLine(getSlideingLine());
-        moveSelectLineChart.setChartData(getFoldLine());
-        moveSelectLineChart.show();
+        slideSelectLineChart.setSlideLine(getSlideingLine());
+        slideSelectLineChart.setChartData(getFoldLine());
+        slideSelectLineChart.show();
     }
 
 
@@ -100,8 +100,8 @@ public class MoveSelectLineChartActivity extends AppCompatActivity {
 
     private SlidingLine getSlideingLine(){
         SlidingLine slidingLine = new SlidingLine();
-        slidingLine.setSlideLineColor(Color.DKGRAY)
-                .setSlidePointColor(Color.parseColor("#33B5E5"))
+        slidingLine.setSlideLineColor(getResources().getColor(R.color.colorAccent))
+                .setSlidePointColor(getResources().getColor(R.color.colorAccent))
                 .setSlidePointRadius(3);
         return slidingLine;
     }

@@ -22,7 +22,7 @@ public class SlidingLine {
     /**移动标尺线宽度**/
     private float slideLineWidth = 1;
 
-    /**移动点半径**/
+    /**移动标尺线顶端圆点半径**/
     private float slidePointRadius = 3;
 
     /**移动标尺线顶端圆点颜色**/

@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ChartInFragmentActivity" />
-        <activity android:name=".MoveSelectLineChartActivity"></activity>
+        <activity android:name=".SlideSelectLineChartActivity"></activity>
     </application>
 
 </manifest>

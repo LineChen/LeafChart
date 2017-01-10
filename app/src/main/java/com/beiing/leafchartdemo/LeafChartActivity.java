@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.beiing.leafchart.LeafLineChart;
@@ -14,7 +13,6 @@ import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.Square;
-import com.beiing.leafchart.support.OnPointSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +134,7 @@ public class LeafChartActivity extends AppCompatActivity {
         startActivity(new Intent(this, ChartInFragmentActivity.class));
     }
 
-    public void MoveSelectLineChart(View view) {
-        startActivity(new Intent(this, MoveSelectLineChartActivity.class));
+    public void SlideSelectLineChart(View view) {
+        startActivity(new Intent(this, SlideSelectLineChartActivity.class));
     }
 }

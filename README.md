@@ -4,7 +4,7 @@
 ##一、折线图
 
 
-### 1.1 设置
+###设置
 
 >坐标轴
 
@@ -26,14 +26,34 @@
 -  `Line.setFillColr`	填充颜色(默认为有透明度的折线颜色)
 
 
->MoveSelectLineChart
-新增：
+>SlideSelectLineChart
 
-- `Line.setOpenMoveSelect` 是否开启滑动选值
-- `Line.setMoveLineColor` 	移动标尺线的颜色
+- `SlidingLine.setOpenSlideSelect` 是否开启滑动选值
+- `SlidingLine.setDash` 	移动标尺线是否是虚线
+- `SlidingLine.setSlideLineColor` 移动标尺线颜色
+- `SlidingLine.setSlideLineWidth` 移动标尺线宽度
+- `SlidingLine.setSlidePointRadius` 移动标尺线顶端圆点半径
+- `SlidingLine.setSlidePointColor` 移动标尺线顶端圆点颜色
+
+###自定义属性
+| 属性名 | 说明 | 默认值 |
+|--------|--------|--------|
+|  leftPadding   |    左间距    | 	20dp 	|
+|  topPadding   |    上间距    | 10dp 	|
+|  rightPadding   |    右间距    | 	10dp|
+|  bottomPadding   |   下间距    | 	20dp	|
+|  startMarginX   |    第一个点x轴方向起始位置    |0dp 	|
+|  startMarginY   |    第一个点y轴方向起始位置    |0dp 	|
+|   coordinateMode   |   坐标轴相交模式    |Mode.INTERSEC 	|
 
 
-### 1.2 效果图
+###效果图
+
+- 坐标轴相交模式
+![坐标轴相交模式](https://github.com/LineChen/LeafChart/blob/master/screenshot/mode.png)
+
+- LeafChart
+
 ![截图1](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line1.gif)
 
 ![截图2](https://github.com/LineChen/LeafChart/blob/master/screenshot/animate_line2.gif)
@@ -44,10 +64,10 @@
 
 - 移动选值
 
-![移动选值](https://github.com/LineChen/LeafChart/blob/master/screenshot/move_select.gif)
+![移动选值](https://github.com/LineChen/LeafChart/blob/master/screenshot/slide_select.gif)
 
 
-### 1.3 使用
+###LeafLineChart使用
 
 ``` java
     <com.beiing.leafchart.LeafLineChart
@@ -107,6 +127,7 @@ private List<AxisValue> getAxisValuesY(){
     }
 ```
 
+图表设置数据：
 ```java
 
  Axis axisX = new Axis(getAxisValuesX());
@@ -126,12 +147,68 @@ private List<AxisValue> getAxisValuesY(){
 //lineChart.show();
 ```
 
+###SlideSelectLineChart使用
+
+初始化X轴数据（注意：如果想在滑动选值的时候能正确返回点对应x轴刻度，不要忘了调用`setLabel`方法）：
+``` java
+    private List<AxisValue> getAxisValuesX(){
+        List<AxisValue> axisValues = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            AxisValue value = new AxisValue();
+            value.setLabel(i + "月");
+            axisValues.add(value);
+        }
+        return axisValues;
+    }
+```
+
+
+初始化Y轴数据：
+（同1.3）
+
+初始化点数据和相关设置：
+（同1.3）
+
+初始化标尺线：
+
+```java
+private SlidingLine getSlideingLine(){
+        SlidingLine slidingLine = new SlidingLine();
+        slidingLine.setSlideLineColor(getResources().getColor(R.color.colorAccent))
+                .setSlidePointColor(getResources().getColor(R.color.colorAccent))
+                .setSlidePointRadius(3);
+        return slidingLine;
+    }
+
+```
+
+图表设置数据：
+
+```java
+
+private void initLineChart() {
+        Axis axisX = new Axis(getAxisValuesX());
+        axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(false);
+        Axis axisY = new Axis(getAxisValuesY());
+        axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
+        slideSelectLineChart.setAxisX(axisX);
+        slideSelectLineChart.setAxisY(axisY);
+
+        slideSelectLineChart.setSlideLine(getSlideingLine());
+        slideSelectLineChart.setChartData(getFoldLine());
+        slideSelectLineChart.show();
+    }
+
+```
+
+
+
 
 ## 二、直方图
 
 使用类似折线图
 
-###2.1  设置
+###  设置
 - `Square.setWidth`	直方图宽度
 - `Square.setBorderWidth`	边框宽度
 - `Square.setBorderColor`	边框颜色
@@ -141,7 +218,7 @@ private List<AxisValue> getAxisValuesY(){
 - `Square.setLabelRadius`	标签弧度
 
 
-###2.2 效果图
+### 效果图
 
 ![square](https://github.com/LineChen/LeafChart/blob/master/screenshot/square.png)
 

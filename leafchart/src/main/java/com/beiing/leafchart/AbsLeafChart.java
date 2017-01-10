@@ -3,10 +3,6 @@ package com.beiing.leafchart;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -29,16 +25,16 @@ import java.util.List;
 public abstract class AbsLeafChart extends View implements Chart{
 
     /**
-     * 坐标轴原点处模式
+     * 坐标轴相交模式
      */
     protected int coordinateMode;
 
     /**
-     * 第一个点距y轴距离
+     * 第一个点x轴方向起始位置
      */
     protected int startMarginX = 0;
     /**
-     * 第一个点距x轴距离
+     * 第一个点y轴方向起始位置
      */
     protected int startMarginY = 0;
 
@@ -75,8 +71,8 @@ public abstract class AbsLeafChart extends View implements Chart{
     private void initAttrs(AttributeSet attrs) {
         TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
         try{
-            topPadding = ta.getDimension(R.styleable.AbsLeafChart_topPadding, LeafUtil.dp2px(mContext, 10));
             leftPadding = ta.getDimension(R.styleable.AbsLeafChart_leftPadding, LeafUtil.dp2px(mContext, 20));
+            topPadding = ta.getDimension(R.styleable.AbsLeafChart_topPadding, LeafUtil.dp2px(mContext, 10));
             rightPadding = ta.getDimension(R.styleable.AbsLeafChart_rightPadding, LeafUtil.dp2px(mContext, 10));
             bottomPadding = ta.getDimension(R.styleable.AbsLeafChart_bottomPadding, LeafUtil.dp2px(mContext, 20));
             startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
