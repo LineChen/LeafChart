@@ -162,8 +162,13 @@ public class LeafLineRenderer extends AbsRenderer {
                     final float firstControlPointY = previousPointY + (LINE_SMOOTHNESS * firstDiffY);
                     final float secondControlPointX = currentPointX - (LINE_SMOOTHNESS * secondDiffX);
                     final float secondControlPointY = currentPointY - (LINE_SMOOTHNESS * secondDiffY);
-                    path.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
-                            currentPointX, currentPointY);
+
+                    if(currentPointY == previousPointY){
+                        path.lineTo(currentPointX, currentPointY);
+                    } else {
+                        path.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
+                                currentPointX, currentPointY);
+                    }
                 }
 
                 // Shift values by one back to prevent recalculation of values that have

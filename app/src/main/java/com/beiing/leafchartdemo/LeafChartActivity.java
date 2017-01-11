@@ -88,14 +88,22 @@ public class LeafChartActivity extends AppCompatActivity {
 
     private Line getFoldLine(){
         List<PointValue> pointValues = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
+
+        PointValue p = new PointValue();
+        p.setX( (1 - 1) / 11f);
+        p.setLabel(String.valueOf(90));
+        p.setY(90 / 100f);
+        pointValues.add(p);
+        for (int i = 2; i <= 12; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 11f);
-            int var = (int) (Math.random() * 100);
+//            int var = (int) (Math.random() * 100);
+            int var = 20;
             pointValue.setLabel(String.valueOf(var));
             pointValue.setY(var / 100f);
             pointValues.add(pointValue);
         }
+
 
         Line line = new Line(pointValues);
         line.setLineColor(Color.parseColor("#33B5E5"))
