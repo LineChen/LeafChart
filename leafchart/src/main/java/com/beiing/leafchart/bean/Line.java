@@ -25,7 +25,7 @@ public class Line extends ChartData {
 
     private boolean isFill; // 是否填充
 
-    private int fillColr = 0; // 填充色
+    private int fillColor = 0; // 填充色
 
     private Path path = new Path();//折线路径
 
@@ -51,12 +51,12 @@ public class Line extends ChartData {
         return this;
     }
 
-    public int getFillColr() {
-        return fillColr;
+    public int getFillColor() {
+        return fillColor;
     }
 
-    public Line setFillColr(int fillColr) {
-        this.fillColr = fillColr;
+    public Line setFillColor(int fillColor) {
+        this.fillColor = fillColor;
         return this;
     }
 

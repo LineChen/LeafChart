@@ -202,14 +202,14 @@ public class LeafLineRenderer extends AbsRenderer {
             path.close();
 
             if(fillShader == null){
-                fillShader = new LinearGradient(0, 0, 0, mHeight, line.getFillColr(), Color.TRANSPARENT, Shader.TileMode.CLAMP);
+                fillShader = new LinearGradient(0, 0, 0, mHeight, line.getFillColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP);
                 fillPaint.setShader(fillShader);
             }
 
-            if(line.getFillColr() == 0)
+            if(line.getFillColor() == 0)
                 fillPaint.setAlpha(100);
             else
-                fillPaint.setColor(line.getFillColr());
+                fillPaint.setColor(line.getFillColor());
 
             canvas.save(Canvas.CLIP_SAVE_FLAG);
             canvas.clipRect(firstX, 0, phase * (lastX - firstX) + firstX, mHeight);

@@ -23,7 +23,7 @@
 -  `Line.setLabelColor`		标签背景色
 -  `Line.setLabelRadius`	标签弧度
 -  `Line.setFill`		是否填充
--  `Line.setFillColr`	填充颜色(默认为有透明度的折线颜色)
+-  `Line.setFillColor`	填充颜色(默认为有透明度的折线颜色)
 
 
 >SlideSelectLineChart
