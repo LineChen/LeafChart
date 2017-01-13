@@ -106,7 +106,7 @@ public class SlideSelectLineChart extends AbsLeafChart {
         }
 
         if(slidingLine != null && slidingLine.isOpenSlideSelect()){
-            //绘制移动线条
+            //绘制移动标尺线
             if(isDrawMoveLine){
                 slideRenderer.drawSlideLine(canvas, axisX, slidingLine, moveX, moveY);
             }

@@ -1,69 +1,43 @@
 package com.beiing.leafchartdemo;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
-import com.beiing.leafchart.LeafLineChart;
-import com.beiing.leafchart.LeafSquareChart;
+import com.beiing.leafchart.OutsideLineChart;
 import com.beiing.leafchart.bean.Axis;
 import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
-import com.beiing.leafchart.bean.Square;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeafChartActivity extends AppCompatActivity {
-
-    LeafLineChart leafLineChart;
-
-    LeafSquareChart leafSquareChart;
-
+public class OutsideLineChartActivity extends AppCompatActivity {
+    OutsideLineChart outsideLineChart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaf_chart);
-        leafLineChart = (LeafLineChart) findViewById(R.id.leaf_chart);
+        setContentView(R.layout.activity_outside_line_chart);
 
-        leafSquareChart = (LeafSquareChart) findViewById(R.id.leaf_square_chart);
+        outsideLineChart = (OutsideLineChart) findViewById(R.id.outside_linechart);
 
-        //测试折线图
         initLineChart();
-
-        //测试直方图
-        initSquareChart();
     }
 
-    private void initSquareChart() {
-        Axis axisX = new Axis(getAxisValuesX());
-        axisX.setAxisColor(Color.parseColor("#FF4081")).setTextColor(Color.DKGRAY).setHasLines(false);
-        Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.parseColor("#FF4081")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
-
-        leafSquareChart.setAxisX(axisX);
-        leafSquareChart.setAxisY(axisY);
-        leafSquareChart.setChartData(getSquares());
-    }
 
     private void initLineChart() {
         Axis axisX = new Axis(getAxisValuesX());
         axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true);
         Axis axisY = new Axis(getAxisValuesY());
         axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
-        leafLineChart.setAxisX(axisX);
-        leafLineChart.setAxisY(axisY);
+        outsideLineChart.setAxisX(axisX);
+        outsideLineChart.setAxisY(axisY);
 
-        List<Line> lines = new ArrayList<>();
-        lines.add(getFoldLine());
-        leafLineChart.setChartData(lines);
+        outsideLineChart.setChartData(getFoldLine());
 
-        leafLineChart.showWithAnimation(1000);
+        outsideLineChart.showWithAnimation(1000);
 
-//        leafLineChart.show();
     }
 
     private List<AxisValue> getAxisValuesX(){
@@ -118,35 +92,4 @@ public class LeafChartActivity extends AppCompatActivity {
         return line;
     }
 
-    private Square getSquares(){
-        List<PointValue> pointValues = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            PointValue pointValue = new PointValue();
-            pointValue.setX( (i - 1) / 11f);
-            int var = (int) (Math.random() * 100);
-            pointValue.setLabel(String.valueOf(var));
-            pointValue.setY(var / 100f);
-            pointValues.add(pointValue);
-        }
-
-        Square square = new Square(pointValues);
-        square.setBorderColor(Color.parseColor("#FF4081"))
-                .setWidth(20)
-                .setFill(false)
-                .setHasLabels(true)
-                .setLabelColor(Color.parseColor("#FF4081"));
-        return square;
-    }
-
-    public void toChartInFragment(View view) {
-        startActivity(new Intent(this, ChartInFragmentActivity.class));
-    }
-
-    public void SlideSelectLineChart(View view) {
-        startActivity(new Intent(this, SlideSelectLineChartActivity.class));
-    }
-
-    public void OutsideLineChart(View view) {
-        startActivity(new Intent(this, OutsideLineChartActivity.class));
-    }
 }

@@ -19,7 +19,7 @@ public class Axis {
     /**
      * 刻度集合
      */
-    private List<AxisValue> values = new ArrayList<AxisValue>();
+    private List<AxisValue> values = new ArrayList<>();
 
     /**
      * 是否画平行于x、y坐标轴
