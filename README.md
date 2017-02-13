@@ -38,13 +38,13 @@
 ###自定义属性
 | 属性名 | 说明 | 默认值 |
 |--------|--------|--------|
-|  leftPadding   |    左间距    | 	20dp 	|
-|  topPadding   |    上间距    | 10dp 	|
-|  rightPadding   |    右间距    | 	10dp|
-|  bottomPadding   |   下间距    | 	20dp	|
-|  startMarginX   |    第一个点x轴方向起始位置    |0dp 	|
-|  startMarginY   |    第一个点y轴方向起始位置    |0dp 	|
-|   coordinateMode   |   坐标轴相交模式    |Mode.INTERSEC 	|
+|  lc_leftPadding   |    左间距    | 	20dp 	|
+|  lc_topPadding   |    上间距    | 10dp 	|
+|  lc_rightPadding   |    右间距    | 	10dp|
+|  lc_bottomPadding   |   下间距    | 	20dp	|
+|  lc_startMarginX   |    第一个点x轴方向起始位置    |0dp 	|
+|  lc_startMarginY   |    第一个点y轴方向起始位置    |0dp 	|
+|  lc_coordinateMode   |   坐标轴相交模式    |Mode.INTERSEC 	|
 
 
 ###效果图
