@@ -60,8 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:background="#ffffff"
-                app:startMarginX="20dp"
-                app:coordinateMode="intersect"
+                app:lc_startMarginX="20dp"
+                app:lc_coordinateMode="intersect"
                 />
         </LinearLayout>
 

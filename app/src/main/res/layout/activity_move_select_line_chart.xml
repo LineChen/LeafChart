@@ -36,12 +36,12 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_height="300dp"
-        app:coordinateMode="x_across"
-        app:leftPadding="30dp"
-        app:topPadding="0dp"
-        app:bottomPadding="4dp"
-        app:startMarginY="8dp"
-        app:startMarginX="4dp"
+        app:lc_coordinateMode="x_across"
+        app:lc_leftPadding="30dp"
+        app:lc_topPadding="0dp"
+        app:lc_bottomPadding="4dp"
+        app:lc_startMarginY="8dp"
+        app:lc_startMarginX="4dp"
         />
 
 </LinearLayout>

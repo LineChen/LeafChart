@@ -71,13 +71,13 @@ public abstract class AbsLeafChart extends View implements Chart{
     private void initAttrs(AttributeSet attrs) {
         TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
         try{
-            leftPadding = ta.getDimension(R.styleable.AbsLeafChart_leftPadding, LeafUtil.dp2px(mContext, 20));
-            topPadding = ta.getDimension(R.styleable.AbsLeafChart_topPadding, LeafUtil.dp2px(mContext, 10));
-            rightPadding = ta.getDimension(R.styleable.AbsLeafChart_rightPadding, LeafUtil.dp2px(mContext, 10));
-            bottomPadding = ta.getDimension(R.styleable.AbsLeafChart_bottomPadding, LeafUtil.dp2px(mContext, 20));
-            startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginX, 0);
-            startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_startMarginY, 0);
-            coordinateMode = ta.getInteger(R.styleable.AbsLeafChart_coordinateMode, Mode.INTERSECT);
+            leftPadding = ta.getDimension(R.styleable.AbsLeafChart_lc_leftPadding, LeafUtil.dp2px(mContext, 20));
+            topPadding = ta.getDimension(R.styleable.AbsLeafChart_lc_topPadding, LeafUtil.dp2px(mContext, 10));
+            rightPadding = ta.getDimension(R.styleable.AbsLeafChart_lc_rightPadding, LeafUtil.dp2px(mContext, 10));
+            bottomPadding = ta.getDimension(R.styleable.AbsLeafChart_lc_bottomPadding, LeafUtil.dp2px(mContext, 20));
+            startMarginX = (int) ta.getDimension(R.styleable.AbsLeafChart_lc_startMarginX, 0);
+            startMarginY = (int) ta.getDimension(R.styleable.AbsLeafChart_lc_startMarginY, 0);
+            coordinateMode = ta.getInteger(R.styleable.AbsLeafChart_lc_coordinateMode, Mode.INTERSECT);
         } finally {
             ta.recycle();
         }
