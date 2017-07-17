@@ -23,7 +23,8 @@
     <com.beiing.leafchart.OutsideLineChart
         android:id="@+id/outside_linechart"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        app:lc_step="30dp"/>
 
 
 

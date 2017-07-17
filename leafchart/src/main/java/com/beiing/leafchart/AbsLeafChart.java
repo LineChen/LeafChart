@@ -68,7 +68,7 @@ public abstract class AbsLeafChart extends View implements Chart{
         initAttrs(attrs);
     }
 
-    private void initAttrs(AttributeSet attrs) {
+    protected void initAttrs(AttributeSet attrs) {
         TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.AbsLeafChart);
         try{
             leftPadding = ta.getDimension(R.styleable.AbsLeafChart_lc_leftPadding, LeafUtil.dp2px(mContext, 20));
@@ -140,12 +140,14 @@ public abstract class AbsLeafChart extends View implements Chart{
      * 设置坐标轴位置
      */
     public void resetAsixSize() {
+
         resetAsixX();
 
         resetAsixY();
+
     }
 
-    private void resetAsixY() {
+    protected void resetAsixY() {
         if(axisY != null){
             List<AxisValue> values = axisY.getValues();
             int sizeY = values.size(); //几条x轴
@@ -175,7 +177,7 @@ public abstract class AbsLeafChart extends View implements Chart{
         }
     }
 
-    private void resetAsixX() {
+    protected void resetAsixX() {
         if(axisX != null){
             List<AxisValue> values = axisX.getValues();
             int sizeX = values.size(); //几条y轴

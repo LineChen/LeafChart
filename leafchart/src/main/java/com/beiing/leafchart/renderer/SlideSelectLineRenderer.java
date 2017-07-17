@@ -57,8 +57,10 @@ public class SlideSelectLineRenderer extends LeafLineRenderer {
         slidePaint.setStrokeWidth(LeafUtil.dp2px(mContext, 2));
         slidePaint.setColor(slidingLine.getSlidePointColor());
         canvas.drawCircle(moveX, moveY, LeafUtil.dp2px(mContext, slidePointRadius) , slidePaint);
-        slidePaint.setAlpha(100);
-        canvas.drawCircle(moveX, moveY, LeafUtil.dp2px(mContext, slidePointRadius + 2) , slidePaint);
+        if(slidingLine.getSlidePointColor() != 0){
+            slidePaint.setAlpha(100);
+            canvas.drawCircle(moveX, moveY, LeafUtil.dp2px(mContext, slidePointRadius + 2) , slidePaint);
+        }
     }
 
 }

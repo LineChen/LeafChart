@@ -20,4 +20,8 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="OutsideLineChart">
+        <attr name="lc_step" format="dimension"/>
+    </declare-styleable>
+
 </resources>

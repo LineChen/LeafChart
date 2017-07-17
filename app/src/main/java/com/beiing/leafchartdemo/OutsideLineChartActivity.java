@@ -28,9 +28,9 @@ public class OutsideLineChartActivity extends AppCompatActivity {
 
     private void initLineChart() {
         Axis axisX = new Axis(getAxisValuesX());
-        axisX.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true);
+        axisX.setAxisColor(Color.parseColor("#00000000")).setTextColor(Color.DKGRAY).setHasLines(true);
         Axis axisY = new Axis(getAxisValuesY());
-        axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(true).setShowText(true);
+        axisY.setAxisColor(Color.parseColor("#33B5E5")).setTextColor(Color.DKGRAY).setHasLines(false).setShowText(true);
         outsideLineChart.setAxisX(axisX);
         outsideLineChart.setAxisY(axisY);
 
@@ -42,9 +42,9 @@ public class OutsideLineChartActivity extends AppCompatActivity {
 
     private List<AxisValue> getAxisValuesX(){
         List<AxisValue> axisValues = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 30; i++) {
             AxisValue value = new AxisValue();
-            value.setLabel(i + "月");
+            value.setLabel(i + "日");
             axisValues.add(value);
         }
         return axisValues;
@@ -71,8 +71,8 @@ public class OutsideLineChartActivity extends AppCompatActivity {
         for (int i = 2; i <= 12; i++) {
             PointValue pointValue = new PointValue();
             pointValue.setX( (i - 1) / 11f);
-//            int var = (int) (Math.random() * 100);
-            int var = 20;
+            int var = (int) (Math.random() * 100);
+//            int var = 20;
             pointValue.setLabel(String.valueOf(var));
             pointValue.setY(var / 100f);
             pointValues.add(pointValue);
@@ -82,9 +82,9 @@ public class OutsideLineChartActivity extends AppCompatActivity {
         Line line = new Line(pointValues);
         line.setLineColor(Color.parseColor("#33B5E5"))
                 .setLineWidth(3)
-                .setPointColor(Color.YELLOW)
-                .setCubic(true)
+                .setPointColor(Color.RED)
                 .setPointRadius(3)
+                .setHasPoints(true)
                 .setFill(true)
                 .setFillColor(Color.parseColor("#33B5E5"))
                 .setHasLabels(true)

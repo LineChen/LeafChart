@@ -18,6 +18,7 @@ import android.graphics.Shader;
 import android.view.View;
 
 import com.beiing.leafchart.bean.Axis;
+import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.ChartData;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
@@ -64,11 +65,52 @@ public class OutsideLineRenderer extends AbsRenderer {
     }
 
     /**
+     * 画坐标轴 刻度值
+     * @param canvas
+     */
+    public void drawCoordinateText(Canvas canvas, Axis axisX, Axis axisY, int moveX) {
+        if(axisX != null && axisY != null){
+            //////// X 轴
+            // 1.刻度
+            coordPaint.setColor(axisX.getTextColor());
+            coordPaint.setTextSize(LeafUtil.sp2px(mContext, axisX.getTextSize()));
+
+            Paint.FontMetrics fontMetrics = coordPaint.getFontMetrics(); // 获取标题文字的高度（fontMetrics.descent - fontMetrics.ascent）
+            float textH = fontMetrics.descent - fontMetrics.ascent;
+
+            List<AxisValue> valuesX = axisX.getValues();
+            if(axisX.isShowText()){
+                for (int i = 0; i < valuesX.size(); i++) {
+                    AxisValue value = valuesX.get(i);
+                    if(value.isShowLabel()){
+                        float textW = coordPaint.measureText(value.getLabel());
+                        canvas.drawText(value.getLabel(), value.getPointX() - textW / 2 + moveX,  value.getPointY() - textH / 2, coordPaint);
+                    }
+                }
+            }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////// Y 轴
+            coordPaint.setColor(axisY.getTextColor());
+            coordPaint.setTextSize(LeafUtil.sp2px(mContext, axisY.getTextSize()));
+
+            List<AxisValue> valuesY = axisY.getValues();
+            if(axisY.isShowText()){
+                for (AxisValue value : valuesY){
+                    float textW = coordPaint.measureText(value.getLabel());
+                    float pointx = value.getPointX() - 1.1f * textW;
+                    canvas.drawText(value.getLabel(), pointx , value.getPointY(), coordPaint);
+                }
+            }
+        }
+    }
+
+    /**
      * 画折线
      *
      * @param canvas
      */
-    public void drawLines(Canvas canvas, Line line, int moveX) {
+    public void drawLines(Canvas canvas, Line line, Axis axisY, int moveX) {
         if(line != null && isShow){
             linePaint.setColor(line.getLineColor());
             linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
@@ -84,7 +126,10 @@ public class OutsideLineRenderer extends AbsRenderer {
 
             measure = new PathMeasure(path, false);
             linePaint.setPathEffect(createPathEffect(measure.getLength(), phase, 0.0f));
+            canvas.save(Canvas.CLIP_SAVE_FLAG);
+            canvas.clipRect(axisY.getStartX(), 0, mWidth, mHeight);
             canvas.drawPath(path, linePaint);
+            canvas.restore();
         }
     }
 
@@ -129,12 +174,14 @@ public class OutsideLineRenderer extends AbsRenderer {
      * 画圆点
      * @param canvas
      */
-    public void drawPoints(Canvas canvas, Line line, int moveX) {
+    public void drawPoints(Canvas canvas, Line line, Axis axisY, int moveX) {
         if (line != null && line.isHasPoints() && isShow) {
             List<PointValue> values = line.getValues();
             float radius = LeafUtil.dp2px(mContext, line.getPointRadius());
             float strokeWidth = LeafUtil.dp2px(mContext, 1);
             PointValue point;
+            canvas.save(Canvas.CLIP_SAVE_FLAG);
+            canvas.clipRect(axisY.getStartX(), 0, mWidth, mHeight);
             for (int i = 0, size = values.size(); i < size; i++) {
                 point = values.get(i);
                 labelPaint.setStyle(Paint.Style.FILL);
@@ -147,17 +194,19 @@ public class OutsideLineRenderer extends AbsRenderer {
                 canvas.drawCircle(point.getOriginX() + moveX, point.getOriginY(),
                         radius , labelPaint);
             }
+            canvas.restore();
         }
     }
 
-    @Override
-    public void drawLabels(Canvas canvas, ChartData chartData, Axis axisY) {
+    public void drawLabels(Canvas canvas, ChartData chartData, Axis axisY, int moveX) {
         if(isAnimateEnd){
             if (chartData != null) {
                 if(chartData.isHasLabels()){
                     labelPaint.setTextSize(LeafUtil.sp2px(mContext, 12));
                     List<PointValue> values = chartData.getValues();
                     int size = values.size();
+                    canvas.save(Canvas.CLIP_SAVE_FLAG);
+                    canvas.clipRect(axisY.getStartX(), 0, mWidth, mHeight);
                     for (int i = 0; i < size; i++) {
                         PointValue point = values.get(i);
                         String label = point.getLabel();
@@ -195,7 +244,8 @@ public class OutsideLineRenderer extends AbsRenderer {
                             left -= rightPadding;
                         }
 
-                        RectF rectF = new RectF(left, top, right, bottom);
+
+                        RectF rectF = new RectF(left + moveX, top, right + moveX, bottom);
                         float labelRadius = LeafUtil.dp2px(mContext,chartData.getLabelRadius());
                         labelPaint.setColor(chartData.getLabelColor());
                         labelPaint.setStyle(Paint.Style.FILL);
@@ -203,10 +253,11 @@ public class OutsideLineRenderer extends AbsRenderer {
 
                         //drawText
                         labelPaint.setColor(Color.WHITE);
-                        float xCoordinate = left + (right - left - textW) / 2;
+                        float xCoordinate = left + (right - left - textW) / 2 + moveX;
                         float yCoordinate = bottom - (bottom - top - textH) / 2 ;
                         canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
                     }
+                    canvas.restore();
                 }
             }
         }

@@ -92,7 +92,7 @@ public class SlideSelectLineChartActivity extends AppCompatActivity {
                 .setCubic(true)
                 .setPointRadius(2)
                 .setFill(true)
-                .setHasPoints(false)
+                .setHasPoints(true)
                 .setFillColor(Color.parseColor("#33B5E5"))
                 .setLabelColor(Color.parseColor("#33B5E5"));
         return line;
