@@ -1,9 +1,12 @@
 package com.beiing.leafchart;
 
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.beiing.leafchart.bean.AxisValue;
@@ -12,6 +15,7 @@ import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.SlidingLine;
 import com.beiing.leafchart.renderer.SlideSelectLineRenderer;
 import com.beiing.leafchart.support.LeafUtil;
+import com.beiing.leafchart.support.OnChartSelectedListener;
 import com.beiing.leafchart.support.OnPointSelectListener;
 
 import java.util.List;
@@ -35,7 +39,11 @@ public class SlideSelectLineChart extends AbsLeafChart {
     float downY;
     int scaledTouchSlop;
 
+    private boolean isCanSelected;
+
     SlideSelectLineRenderer slideRenderer;
+
+    private OnChartSelectedListener mOnChartSelectedListener;
 
     public SlideSelectLineChart(Context context) {
         this(context, null, 0);
@@ -51,6 +59,17 @@ public class SlideSelectLineChart extends AbsLeafChart {
         initDefaultSlidingLine();
 
         scaledTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+
+        setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setCanSelected(true);
+                if (null != mOnChartSelectedListener) {
+                    mOnChartSelectedListener.onChartSelected(true);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -86,28 +105,29 @@ public class SlideSelectLineChart extends AbsLeafChart {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if(line != null){
-            if(line.isCubic()) {
+        if (line != null) {
+            if (line.isCubic()) {
                 slideRenderer.drawCubicPath(canvas, line);
             } else {
                 slideRenderer.drawLines(canvas, line);
             }
-            
-            if(line.isFill()){
+
+            if (line.isFill()) {
                 //填充
                 slideRenderer.drawFillArea(canvas, line, axisX);
             }
 
             slideRenderer.drawPoints(canvas, line);
+
+            if (line.isHasLabels()) {
+                slideRenderer.drawLabels(canvas, line, axisY);
+            }
+
         }
 
-        if (line != null && line.isHasLabels()) {
-            slideRenderer.drawLabels(canvas, line, axisY);
-        }
-
-        if(slidingLine != null && slidingLine.isOpenSlideSelect()){
+        if (slidingLine != null && slidingLine.isOpenSlideSelect()) {
             //绘制移动标尺线
-            if(isDrawMoveLine){
+            if (isDrawMoveLine) {
                 slideRenderer.drawSlideLine(canvas, axisX, slidingLine, moveX, moveY);
             }
         }
@@ -115,51 +135,66 @@ public class SlideSelectLineChart extends AbsLeafChart {
 
     /**
      * 带动画的绘制
+     *
      * @param duration
      */
-    public void showWithAnimation(int duration){
+    public void showWithAnimation(int duration) {
         slideRenderer.showWithAnimation(duration);
     }
 
-    public void show(){
+    public void show() {
         showWithAnimation(0);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!isCanSelected)
+            return super.onTouchEvent(event);
+
         float x = event.getX();
         float y = event.getY();
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 downX = event.getX();
                 downY = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(downX - x != 0 && Math.abs(y - downY) < scaledTouchSlop){
+                if (downX - x != 0 && Math.abs(y - downY) < scaledTouchSlop) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 isDrawMoveLine = false;
+                isCanSelected = false;
+                if (null != mOnChartSelectedListener) {
+                    mOnChartSelectedListener.onChartSelected(false);
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                isCanSelected = false;
+                if (null != mOnChartSelectedListener) {
+                    mOnChartSelectedListener.onChartSelected(false);
+                }
                 break;
         }
         countRoundPoint(x);
         invalidate();
 
         if (slidingLine != null) {
-            if(slidingLine.isOpenSlideSelect()){
+            if (slidingLine.isOpenSlideSelect()) {
                 return true;
             }
         }
-        return super.onTouchEvent(event);
+        return false;
     }
 
     /**
      * 计算最接近的点
+     *
      * @param x
      */
-    private void countRoundPoint(float x){
-        if(line != null){
+    private void countRoundPoint(float x) {
+        if (line != null) {
             List<AxisValue> axisXValues = axisX.getValues();
             int sizeX = axisXValues.size(); //几条y轴
             float xStep = (mWidth - leftPadding - startMarginX) / sizeX;
@@ -167,15 +202,17 @@ public class SlideSelectLineChart extends AbsLeafChart {
             List<PointValue> values = line.getValues();
             for (int i = 0, size = values.size(); i < size; i++) {
                 PointValue pointValue = values.get(i);
+                pointValue.setShowLabel(false);
                 int ploc = Math.round(pointValue.getDiffX() / xStep);
-                if(ploc == loc){
+                if (ploc == loc) {
+                    pointValue.setShowLabel(true);
                     moveX = pointValue.getOriginX();
                     moveY = pointValue.getOriginY() + LeafUtil.dp2px(mContext, line.getPointRadius());
                     isDrawMoveLine = true;
-                    if(onPointSelectListener != null){
+                    if (onPointSelectListener != null) {
                         onPointSelectListener.onPointSelect(loc, axisXValues.get(loc).getLabel(), pointValue.getLabel());
                     }
-                    break;
+//                    break;
                 }
             }
         }
@@ -186,7 +223,7 @@ public class SlideSelectLineChart extends AbsLeafChart {
         resetPointWeight();
     }
 
-    public void setSlideLine(SlidingLine slideLine){
+    public void setSlideLine(SlidingLine slideLine) {
         this.slidingLine = slideLine;
     }
 
@@ -196,5 +233,15 @@ public class SlideSelectLineChart extends AbsLeafChart {
 
     public void setOnPointSelectListener(OnPointSelectListener onPointSelectListener) {
         this.onPointSelectListener = onPointSelectListener;
+    }
+
+    public void setOnChartSelectedListener(OnChartSelectedListener mOnChartSelectedListener) {
+        this.mOnChartSelectedListener = mOnChartSelectedListener;
+    }
+
+    public void setCanSelected(boolean canSelected) {
+        isCanSelected = canSelected;
+        Vibrator vib = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(40);
     }
 }

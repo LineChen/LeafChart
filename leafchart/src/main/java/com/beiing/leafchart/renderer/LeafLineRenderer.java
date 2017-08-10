@@ -32,7 +32,9 @@ import java.util.List;
 public class LeafLineRenderer extends AbsRenderer {
     private static final float LINE_SMOOTHNESS = 0.16f;
 
-    /**填充画笔**/
+    /**
+     * 填充画笔
+     **/
     private Paint fillPaint;
 
     private PathMeasure measure;
@@ -68,7 +70,7 @@ public class LeafLineRenderer extends AbsRenderer {
      * @param canvas
      */
     public void drawLines(Canvas canvas, Line line) {
-        if(line != null && isShow){
+        if (line != null && isShow) {
             linePaint.setColor(line.getLineColor());
             linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
             linePaint.setStyle(Paint.Style.STROKE);
@@ -77,8 +79,8 @@ public class LeafLineRenderer extends AbsRenderer {
             int size = values.size();
             for (int i = 0; i < size; i++) {
                 PointValue point = values.get(i);
-                if(i == 0)  path.moveTo(point.getOriginX(), point.getOriginY());
-                else  path.lineTo(point.getOriginX(), point.getOriginY());
+                if (i == 0) path.moveTo(point.getOriginX(), point.getOriginY());
+                else path.lineTo(point.getOriginX(), point.getOriginY());
             }
 
             measure = new PathMeasure(path, false);
@@ -91,10 +93,11 @@ public class LeafLineRenderer extends AbsRenderer {
 
     /**
      * 画曲线
+     *
      * @param canvas
      */
     public void drawCubicPath(Canvas canvas, Line line) {
-        if(line != null && isShow){
+        if (line != null && isShow) {
             linePaint.setColor(line.getLineColor());
             linePaint.setStrokeWidth(LeafUtil.dp2px(mContext, line.getLineWidth()));
             linePaint.setStyle(Paint.Style.STROKE);
@@ -163,7 +166,7 @@ public class LeafLineRenderer extends AbsRenderer {
                     final float secondControlPointX = currentPointX - (LINE_SMOOTHNESS * secondDiffX);
                     final float secondControlPointY = currentPointY - (LINE_SMOOTHNESS * secondDiffY);
 
-                    if(currentPointY == previousPointY){
+                    if (currentPointY == previousPointY) {
                         path.lineTo(currentPointX, currentPointY);
                     } else {
                         path.cubicTo(firstControlPointX, firstControlPointY, secondControlPointX, secondControlPointY,
@@ -190,11 +193,12 @@ public class LeafLineRenderer extends AbsRenderer {
 
     /**
      * 填充
+     *
      * @param canvas
      */
     public void drawFillArea(Canvas canvas, Line line, Axis axisX) {
         //继续使用前面的 path
-        if(line != null && line.getValues().size() > 1 && isShow){
+        if (line != null && line.getValues().size() > 1 && isShow) {
             List<PointValue> values = line.getValues();
             PointValue firstPoint = values.get(0);
             float firstX = firstPoint.getOriginX();
@@ -206,12 +210,12 @@ public class LeafLineRenderer extends AbsRenderer {
             path.lineTo(firstX, axisX.getStartY());
             path.close();
 
-            if(fillShader == null){
+            if (fillShader == null) {
                 fillShader = new LinearGradient(0, 0, 0, mHeight, line.getFillColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP);
                 fillPaint.setShader(fillShader);
             }
 
-            if(line.getFillColor() == 0)
+            if (line.getFillColor() == 0)
                 fillPaint.setAlpha(100);
             else
                 fillPaint.setColor(line.getFillColor());
@@ -226,6 +230,7 @@ public class LeafLineRenderer extends AbsRenderer {
 
     /**
      * 画圆点
+     *
      * @param canvas
      */
     public void drawPoints(Canvas canvas, Line line) {
@@ -239,21 +244,22 @@ public class LeafLineRenderer extends AbsRenderer {
                 labelPaint.setStyle(Paint.Style.FILL);
                 labelPaint.setColor(line.getPointColor());
                 canvas.drawCircle(point.getOriginX(), point.getOriginY(),
-                        radius , labelPaint);
+                        radius, labelPaint);
                 labelPaint.setStyle(Paint.Style.STROKE);
                 labelPaint.setColor(Color.WHITE);
                 labelPaint.setStrokeWidth(strokeWidth);
                 canvas.drawCircle(point.getOriginX(), point.getOriginY(),
-                        radius , labelPaint);
+                        radius, labelPaint);
             }
         }
     }
 
     /**
      * 带动画的绘制
+     *
      * @param duration
      */
-    public void showWithAnimation(int duration){
+    public void showWithAnimation(int duration) {
         isAnimateEnd = false;
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, "phase", 0.0f, 1.0f);
         animator.setDuration(duration);
@@ -296,13 +302,13 @@ public class LeafLineRenderer extends AbsRenderer {
     }
 
     private PathEffect createPathEffect(float pathLength, float phase, float offset) {
-        return new DashPathEffect(new float[] { phase * pathLength, pathLength }, 0);
+        return new DashPathEffect(new float[]{phase * pathLength, pathLength}, 0);
     }
 
 
     @Override
     public void drawLabels(Canvas canvas, ChartData chartData, Axis axisY) {
-        if(isAnimateEnd)
-        super.drawLabels(canvas, chartData, axisY);
+        if (isAnimateEnd)
+            super.drawLabels(canvas, chartData, axisY);
     }
 }

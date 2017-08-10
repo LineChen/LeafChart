@@ -126,6 +126,7 @@ public class Line extends ChartData {
         this.hasLines = hasLines;
         return this;
     }
+
     public Path getPath() {
         return path;
     }
@@ -133,6 +134,8 @@ public class Line extends ChartData {
     public void setPath(Path path) {
         this.path = path;
     }
+
+
 }
 
 

@@ -15,11 +15,13 @@ public class PointValue {
     private float originY;
     private String label;
 
-    public PointValue(){
+    private boolean isShowLabel = true; //是否显示label
+
+    public PointValue() {
 
     }
 
-    public PointValue(String label){
+    public PointValue(String label) {
         this.label = label;
     }
 
@@ -79,5 +81,13 @@ public class PointValue {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public boolean isShowLabel() {
+        return isShowLabel;
+    }
+
+    public void setShowLabel(boolean showLabel) {
+        isShowLabel = showLabel;
     }
 }
