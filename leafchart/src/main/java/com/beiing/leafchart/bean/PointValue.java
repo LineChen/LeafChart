@@ -15,7 +15,7 @@ public class PointValue {
     private float originY;
     private String label;
 
-    private boolean isShowLabel = true; //是否显示label
+    private boolean isShowLabel; //是否显示label
 
     public PointValue() {
 
