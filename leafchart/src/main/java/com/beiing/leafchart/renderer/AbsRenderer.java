@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.View;
 
 import com.beiing.leafchart.bean.Axis;
@@ -282,7 +281,6 @@ public class AbsRenderer {
                     float xCoordinate = left + (right - left - textW) / 2;
                     float yCoordinate = bottom - (bottom - top - textH) / 2;
                     canvas.drawText(point.getLabel(), xCoordinate, yCoordinate, labelPaint);
-                    Log.e("====", "label");
                 }
             }
         }

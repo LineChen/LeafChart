@@ -3,6 +3,7 @@ package com.beiing.leafchartdemo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.beiing.leafchart.SlideSelectLineChart;
@@ -11,6 +12,7 @@ import com.beiing.leafchart.bean.AxisValue;
 import com.beiing.leafchart.bean.Line;
 import com.beiing.leafchart.bean.PointValue;
 import com.beiing.leafchart.bean.SlidingLine;
+import com.beiing.leafchart.support.OnChartSelectedListener;
 import com.beiing.leafchart.support.OnPointSelectListener;
 
 import java.util.ArrayList;
@@ -34,6 +36,13 @@ public class SlideSelectLineChartActivity extends AppCompatActivity {
             public void onPointSelect(int position, String xLabel, String value) {
                 String point = xLabel + ":" + value;
                 tvSelectPoint.setText(point);
+            }
+        });
+
+        slideSelectLineChart.setOnChartSelectedListener(new OnChartSelectedListener() {
+            @Override
+            public void onChartSelected(boolean isChartSelected) {
+                Log.e("====", "isChartSelected: " + isChartSelected);
             }
         });
     }
